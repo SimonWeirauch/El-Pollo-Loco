@@ -1,20 +1,13 @@
-class StartscreenObject extends MoveableObject{
-    width = 100;
-    height = 100;
-    ctx;
-    canvas;
-    /*
-    constructor(imagePath, x, canvas){
-        this.ctx = canvas.getContext('2d');
-        this.canvas = canvas;
+class StartscreenObject extends DrawableObject{
+    width = 50;
+    height = 50;
+    x;
+    y;
+    
+    constructor(imagePath, x, y){
+
         super().loadImage(imagePath);
         this.x = x;
-        this.y = 420 - this.height;
+        this.y = y;
     }
-
-    draw(){
-
-    }
-    */
-
 }

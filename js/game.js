@@ -5,15 +5,17 @@ let keyboard = new Keyboard();
 function init(){
     canvas = document.getElementById('canvas');
     initLevel();
-    world = new World(canvas, keyboard);
+    world = new World(canvas, keyboard, level1);
     
 }
 
 
 function initStartscreen(){
     canvas = document.getElementById('canvas');
-    new StartscreenObject('img/10_background_page/left.webp', 50, canvas);
+    startLevel();
+    world = new World(canvas, keyboard, startScreen);
 }
+
 
 
 document.addEventListener('keydown', (event) => {

@@ -1,6 +1,6 @@
 class World{
     character = new Character();
-    level = level1;
+    level;
     ctx;
     canvas;
     keyboard;
@@ -8,10 +8,11 @@ class World{
     statusBar = new Statusbar();
     throwableObjects = [];
 
-    constructor(canvas, keyboard){
+    constructor(canvas, keyboard, level){
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.level = level;
         this.setWorld();
         this.draw();
         this.run();
@@ -49,14 +50,15 @@ class World{
 
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-        
         this.ctx.translate(this.camera_x, 0); //verschiebt die Kamera nach links
         this.addObjectsToMap(this.level.backgroundObjects);
-        
         this.ctx.translate(-this.camera_x, 0); //Back
         
         //Space for fixed objects
-        this.addToMap(this.statusBar);
+        if(!(this.level == startScreen)){
+            this.addToMap(this.statusBar);
+        }
+        
 
         this.ctx.translate(this.camera_x, 0); //Forwards
 
@@ -64,11 +66,22 @@ class World{
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
+        
+        if(this.level == startScreen)
+        {
+            this.addObjectsToMap(this.level.startscreenObjects);
+        }
+        
+        
         this.addObjectsToMap(this.throwableObjects);
         
         
-
-        this.addToMap(this.character);
+        
+        if(!(this.level == startScreen)){
+            this.addToMap(this.character);
+        }
+        
 
 
         this.ctx.translate(-this.camera_x, 0); //verschiebt die Kamera nach links

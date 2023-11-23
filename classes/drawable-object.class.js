@@ -8,6 +8,10 @@ class DrawableObject {
     height = 150;
     width = 100;
 
+    /**
+     * image path für das laden eines unbeweglichen BSildes
+     * @param {*} path 
+     */
     loadImage(path){
         this.img = new Image();
         this.img.src = path;
@@ -18,7 +22,7 @@ class DrawableObject {
     }
 
     /**
-    * 
+    * Für das laden der Bilder des Movements
     * @param {Array} arr ['img/image1.png', 'img/image2.png', ...]
     */
     loadImages(arr){
@@ -31,7 +35,8 @@ class DrawableObject {
 
 
     drawFrame(ctx){
-        if(this instanceof Character || this instanceof Chicken || this instanceof Coin){
+        if(this instanceof Character || this instanceof Chicken || this instanceof Coin
+            || this instanceof Bottle){
          ctx.beginPath();
          ctx.lineWidth = '5';
          ctx.strokeStyle = 'blue';
@@ -39,6 +44,5 @@ class DrawableObject {
          ctx.stroke();
         }
      }
-    
 
 }
