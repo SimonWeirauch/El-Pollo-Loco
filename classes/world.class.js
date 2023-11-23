@@ -22,6 +22,7 @@ class World{
         this.character.world = this;
     }
 
+
     run(){
         setInterval(() => {
             this.checkCollisions();
@@ -62,6 +63,7 @@ class World{
 
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.throwableObjects);
         
         
@@ -94,7 +96,6 @@ class World{
         mo.draw(this.ctx);
         mo.drawFrame(this.ctx);
 
-        
         if(mo.otherDirection) {
             this.flipImageBack(mo);
         }

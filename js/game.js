@@ -9,6 +9,13 @@ function init(){
     
 }
 
+
+function initStartscreen(){
+    canvas = document.getElementById('canvas');
+    new StartscreenObject('img/10_background_page/left.webp', 50, canvas);
+}
+
+
 document.addEventListener('keydown', (event) => {
     if(event.keyCode == 39){
         keyboard.RIGHT = true;
@@ -61,6 +68,7 @@ document.addEventListener('keyup', (event) => {
         keyboard.D = false;
     }
 })
+
 
 function fullscreen(){
     let fullscreen = document.getElementById('fullscreen');
