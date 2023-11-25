@@ -24,16 +24,7 @@ canvas {
     align-items: center;
 }
 
-.controls{
-    position: fixed;
-    bottom: 450px;
-    padding-top: 24px;
-    padding-left: 24px;
-}
 
-.controls span{
-    font-size: 24px; 
-}
 
 
 .instructions span{

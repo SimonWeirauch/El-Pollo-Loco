@@ -67,14 +67,19 @@ class World{
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
+        this.addObjectsToMap(this.throwableObjects);
         
+        //Objects for Startscreen
         if(this.level == startScreen)
         {
             this.addObjectsToMap(this.level.startscreenObjects);
+            //TODO New add to map function for textObjects?
+            this.addTextObject("Left =", 40, 400);
+            this.addTextObject("Right =", 200, 400);
+            this.addTextObject("Jump =", 380, 400);
+            this.addTextObject("Throw = D", 570, 400);
         }
         
-        
-        this.addObjectsToMap(this.throwableObjects);
         
         
         
@@ -91,6 +96,12 @@ class World{
         requestAnimationFrame(function(){
             self.draw();
         });
+    }
+
+
+    addTextObject(text, x, y){
+        this.ctx.font = "30px Arial";
+        this.ctx.fillText(text, x, y);
     }
 
 
