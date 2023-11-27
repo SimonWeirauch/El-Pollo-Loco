@@ -17,6 +17,9 @@ function initStartscreen(){
 }
 
 
+//document.addEventListener('mouse')
+
+//CanvasRenderingContext2D.isPointInPath())
 
 document.addEventListener('keydown', (event) => {
     if(event.keyCode == 39){

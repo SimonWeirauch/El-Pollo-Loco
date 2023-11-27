@@ -1,6 +1,4 @@
 let startScreen;
-//let canvas = document.getElementById('canvas');
-//let ctx = canvas.getContext('2d');
 
 function startLevel(){
     startScreen = new Level(

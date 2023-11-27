@@ -26,9 +26,9 @@ class World{
 
     run(){
         setInterval(() => {
-            this.checkCollisions();
+            this.checkEnemyCollisions();
             this.checkThrowObjects();
-        }, 200);
+        }, 1000/60);                    //TODO - Gamespeed FPS settings if it doesnt run smoothly
     }
 
 
@@ -39,15 +39,29 @@ class World{
         }
     }
 
-    checkCollisions(){
+
+    checkEnemyCollisions(){
         this.level.enemies.forEach((enemy) =>{
-            if(this.character.isColliding(enemy)){
+            let index = 0;
+            if(this.character.isColliding(enemy) && !this.character.isAboveGround() && !(enemy.isDead)){
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy)
+                console.log(enemy.iD);
+                index++;
             };
+            if(this.character.isColliding(enemy) && this.character.isAboveGround()){
+                enemy.chickenDies();
+                enemy.playChickenDeathAnimation();
+                console.log(enemy.iD);
+                setTimeout(() => {
+                    enemy.deleteChicken(this.level, enemy.iD)
+                }, 500);
+                index++;
+            }
         })
     }
 
+    
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.translate(this.camera_x, 0); //verschiebt die Kamera nach links
