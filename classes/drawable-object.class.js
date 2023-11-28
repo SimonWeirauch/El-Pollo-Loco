@@ -5,6 +5,7 @@ class DrawableObject {
     x = 120;
     y = 230;
    
+   
     height = 150;
     width = 100;
 

@@ -1,12 +1,43 @@
 class World{
+    HEALTHBAR_IMG = [
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
+    ]
+
+    COINBAR_IMG = [
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/green/20.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/green/40.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/green/60.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/green/80.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png'
+    ]
+
+    BOTTLEBAR_IMG = [
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/20.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/40.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
+    ]
+
+    
     character = new Character();
     level;
     ctx;
     canvas;
     keyboard;
     camera_x = 0;
-    statusBar = new Statusbar();
     throwableObjects = [];
+
+    healthbar = new Statusbar(this.HEALTHBAR_IMG, 100, 0);
+    coinbar = new Statusbar(this.COINBAR_IMG, 0, 50);
+    bottlebar = new Statusbar(this.BOTTLEBAR_IMG, 0, 100);
 
     constructor(canvas, keyboard, level){
         this.ctx = canvas.getContext('2d');
@@ -28,6 +59,7 @@ class World{
         setInterval(() => {
             this.checkEnemyCollisions();
             this.checkThrowObjects();
+            this.checkObjectCollisions();
         }, 1000/60);                    //TODO - Gamespeed FPS settings if it doesnt run smoothly
     }
 
@@ -42,12 +74,10 @@ class World{
 
     checkEnemyCollisions(){
         this.level.enemies.forEach((enemy) =>{
-            let index = 0;
             if(this.character.isColliding(enemy) && !this.character.isAboveGround() && !(enemy.isDead)){
                 this.character.hit();
-                this.statusBar.setPercentage(this.character.energy)
+                this.healthbar.setPercentage(this.character.energy, this.HEALTHBAR_IMG)
                 console.log(enemy.iD);
-                index++;
             };
             if(this.character.isColliding(enemy) && this.character.isAboveGround()){
                 enemy.chickenDies();
@@ -56,33 +86,45 @@ class World{
                 setTimeout(() => {
                     enemy.deleteChicken(this.level, enemy.iD)
                 }, 500);
-                index++;
+
             }
         })
+    }
+
+    checkObjectCollisions(){
+        this.level.coins.forEach(coin => {
+            if(this.character.isColliding(coin)){
+                this.coinbar.fillCoinbar();
+                this.coinbar.setPercentage(this.coinbar.coinEnergy, this.COINBAR_IMG);
+                setTimeout(() => {
+                    coin.deleteCoin(this.level, coin.iD);
+                }, 30); 
+            }
+        });
     }
 
     
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-        this.ctx.translate(this.camera_x, 0); //verschiebt die Kamera nach links
+        this.ctx.translate(this.camera_x, 0); //verschiebt die Kamera nach rechts
         this.addObjectsToMap(this.level.backgroundObjects);
-        this.ctx.translate(-this.camera_x, 0); //Back
-        
-        //Space for fixed objects
-        if(!(this.level == startScreen)){
-            this.addToMap(this.statusBar);
-        }
-        
-
-        this.ctx.translate(this.camera_x, 0); //Forwards
-
-
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.throwableObjects);
         
+
+        //Space for fixed objects
+        this.ctx.translate(-this.camera_x, 0); //Back
+        if(!(this.level == startScreen)){
+            this.addToMap(this.healthbar);
+            this.addToMap(this.coinbar);
+            this.addToMap(this.bottlebar);
+        }
+        this.ctx.translate(this.camera_x, 0); //Forwards
+
+
         //Objects for Startscreen
         if(this.level == startScreen)
         {
@@ -93,16 +135,11 @@ class World{
             this.addTextObject("Jump =", 380, 400);
             this.addTextObject("Throw = D", 570, 400);
         }
-        
-        
-        
-        
+    
         if(!(this.level == startScreen)){
             this.addToMap(this.character);
         }
         
-
-
         this.ctx.translate(-this.camera_x, 0); //verschiebt die Kamera nach links
         
 
