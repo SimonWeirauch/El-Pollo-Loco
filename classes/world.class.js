@@ -92,12 +92,30 @@ class World{
     }
 
     checkObjectCollisions(){
+        this.checkCoinCollision();
+        this.checkBottleCollision();
+    }
+
+
+    checkCoinCollision(){
         this.level.coins.forEach(coin => {
             if(this.character.isColliding(coin)){
                 this.coinbar.fillCoinbar();
                 this.coinbar.setPercentage(this.coinbar.coinEnergy, this.COINBAR_IMG);
                 setTimeout(() => {
                     coin.deleteCoin(this.level, coin.iD);
+                }, 30); 
+            }
+        });
+    }
+
+    checkBottleCollision(){
+        this.level.bottles.forEach(bottle => {
+            if(this.character.isColliding(bottle)){
+                this.bottlebar.fillBottlebar();
+                this.bottlebar.setPercentage(this.bottlebar.bottleEnergy, this.BOTTLEBAR_IMG);
+                setTimeout(() => {
+                    bottle.deleteBottle(this.level, bottle.iD);
                 }, 30); 
             }
         });
@@ -169,7 +187,7 @@ class World{
 
         }
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+        //mo.drawFrame(this.ctx);
 
         if(mo.otherDirection) {
             this.flipImageBack(mo);

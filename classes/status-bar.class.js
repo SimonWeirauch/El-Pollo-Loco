@@ -1,6 +1,7 @@
 class Statusbar extends DrawableObject{
     percentage;
     coinEnergy = 0;
+    bottleEnergy = 0;
 
     constructor(imgStatusArray, percentage, y){
         super();
@@ -40,6 +41,12 @@ class Statusbar extends DrawableObject{
     fillCoinbar(){
         if((this.coinEnergy < 100)){
             this.coinEnergy += 5;
+        }
+    }
+
+    fillBottlebar(){
+        if((this.bottleEnergy < 100)){
+            this.bottleEnergy += 18;
         }
     }
 

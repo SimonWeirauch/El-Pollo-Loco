@@ -4,6 +4,11 @@ class MoveableObject extends DrawableObject{
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
+    CharacterOffsetY = -20;
+    ObjectOffsetY = -170;
+    
+    ObjectOffsetX = -40;
+    
     
     lastHit = 0;
 
@@ -15,6 +20,7 @@ class MoveableObject extends DrawableObject{
             }
         }, 1000 / 25);
     }
+
 
     isAboveGround(){
         if(this instanceof ThrowableObject){ //Throwable object should always fall
@@ -28,18 +34,30 @@ class MoveableObject extends DrawableObject{
 
 
     isColliding(mo){
-        return this.x + this.width > mo.x &&
+        return (this.x + this.width + this.ObjectOffsetX) >= mo.x &&
+        this.x + this.ObjectOffsetX <= (mo.x + mo.width) &&
+        (this.y + this.CharacterOffsetY + this.height) >= mo.y &&
+        (this.y + this.CharacterOffsetY) <= (mo.y + mo.height + this.ObjectOffsetY);
+      
+        
+        /*
+        Original
+        this.x + this.width > mo.x &&
         this.y + this.height > mo.y &&
         this.x < mo.x &&
         this.y < mo.y + mo.height
         
+
+
+        (this.x + this.width) >= mo.x &&
+        this.x <= (mo.x + mo.width) &&
+        (this.y + this.offsetY + this. height) >= mo.y &&
+        (this.y + this.offsetY) <= (mo.y + mo.height) &&
+        obj.onCollisionCourse;
         
-        /*
-        (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
-               (this.y + this.offsetY + this. height) >= obj.y &&
-               (this.y + this.offsetY) <= (obj.y + obj.height) &&
-               obj.onCollisionCourse;
         */
+        
+
     }
 
     hit(){
