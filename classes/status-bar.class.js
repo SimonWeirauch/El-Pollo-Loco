@@ -11,7 +11,6 @@ class Statusbar extends DrawableObject{
         this.width = 200;
         this.height = 60;
         this.setPercentage(percentage, imgStatusArray);
-        
     }
 
 
@@ -23,20 +22,21 @@ class Statusbar extends DrawableObject{
 
 
     resolveImageIndex(){
-        if(this.percentage == 100){
+        if(this.percentage >= 100){
             return 5
-        }else if(this.percentage > 80){
+        }else if(this.percentage >= 80){
             return 4
-        }else if(this.percentage > 60){
+        }else if(this.percentage >= 60){
             return 3
-        }else if(this.percentage > 40){
+        }else if(this.percentage >= 40){
             return 2
-        }else if(this.percentage > 20){
+        }else if(this.percentage >= 20){
             return 1
         }else{
             return 0
         }
     }
+
 
     fillCoinbar(){
         if((this.coinEnergy < 100)){
@@ -44,10 +44,14 @@ class Statusbar extends DrawableObject{
         }
     }
 
+
     fillBottlebar(){
-        if((this.bottleEnergy < 100)){
-            this.bottleEnergy += 18;
-        }
+        this.bottleEnergy += 20; 
+    }
+
+
+    emptyBottlebar(){
+        this.bottleEnergy -= 20; 
     }
 
 }

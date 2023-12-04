@@ -5,9 +5,9 @@ class MoveableObject extends DrawableObject{
     speedY = 0;
     acceleration = 2.5;
     CharacterOffsetY = -20;
-    ObjectOffsetY = -170;
+    ObjectOffsetY = 0;       //-170 //TODO - Check Offset for Collision
     
-    ObjectOffsetX = -40;
+    ObjectOffsetX = 0;        //-40
     
     
     lastHit = 0;
@@ -47,17 +47,7 @@ class MoveableObject extends DrawableObject{
         this.x < mo.x &&
         this.y < mo.y + mo.height
         
-
-
-        (this.x + this.width) >= mo.x &&
-        this.x <= (mo.x + mo.width) &&
-        (this.y + this.offsetY + this. height) >= mo.y &&
-        (this.y + this.offsetY) <= (mo.y + mo.height) &&
-        obj.onCollisionCourse;
-        
         */
-        
-
     }
 
     hit(){
