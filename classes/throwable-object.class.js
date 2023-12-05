@@ -16,6 +16,8 @@ class ThrowableObject extends MoveableObject{
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ]
 
+    hitable = true;
+
 
 
     constructor(x, y, otherDirection){
@@ -60,6 +62,4 @@ class ThrowableObject extends MoveableObject{
             this.playAnimation(this.IMAGES_SPLASH);
         }, 50);
     }
-
-    
 }

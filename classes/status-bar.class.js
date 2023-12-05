@@ -2,7 +2,7 @@ class Statusbar extends DrawableObject{
     percentage;
     coinEnergy = 0;
     bottleEnergy = 0;
-    endbossEnergy = 0;
+    endbossEnergy = 100;
 
     constructor(imgStatusArray, percentage, y, x){
         super();
@@ -55,6 +55,7 @@ class Statusbar extends DrawableObject{
         this.bottleEnergy -= 20; 
     }
 
+    
     emptyEndbossHealthbar(){
         this.endbossEnergy -= 20;
     }

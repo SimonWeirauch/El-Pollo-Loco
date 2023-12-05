@@ -20,12 +20,9 @@ class Chicken extends MoveableObject{
     constructor(){
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
-        
         this.iD = 100 + Math.random() * 700;
-
         this.x = 200 + Math.random() * (705*3); //spawning point on map
         this.speed = 0.15 + Math.random() * 0.5;
-
         this.animate();
     }
 

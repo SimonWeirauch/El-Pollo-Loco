@@ -4,7 +4,7 @@ class StartscreenObject extends DrawableObject{
     x;
     y;
     
-    constructor(imagePath, x, y){
+    constructor(imagePath, x, y, height, width){
 
         super().loadImage(imagePath);
         this.x = x;

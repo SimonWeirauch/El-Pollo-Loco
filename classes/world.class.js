@@ -43,7 +43,10 @@ class World{
     camera_x = 0;
     bottleCount = 0;
     throwableObjects = [];
+    
     lastThrow = new Date().getTime();
+    lastEndbossHit =  new Date().getTime();
+    
     healthbar = new Statusbar(this.HEALTHBAR_IMG, 100, 0, 40);
     coinbar = new Statusbar(this.COINBAR_IMG, 0, 50, 40);
     bottlebar = new Statusbar(this.BOTTLEBAR_IMG, 0, 100, 40);
@@ -67,23 +70,39 @@ class World{
 
     run(){
         setInterval(() => {
-            this.checkEnemyCollisions();
-            this.checkObjectCollisions();
-            this.checkThrowObjects();
-        }, 1000/60);                    //TODO - Gamespeed FPS settings if it doesnt run smoothly
+            if(this.gameOver()){
+                //this.character.walking_sound = null;
+                //initStartscreen();
+                initGameOverScreen();
+            }
+            else{
+                this.checkEnemyCollisions();
+                this.checkObjectCollisions();
+                this.checkThrowObjects();
+            }
+
+        }, 1000/60);  //TODO - Gamespeed FPS settings if it doesnt run smoothly
     }
 
 
+    gameOver(){
+        return this.character.energy <= 0;
+    }
+
+    //TODO - Clear all Intervalls (Audio and Animations)
+    cancelAllIntervalls(){
+        
+    }
+
     checkEnemyCollisions(){
         this.level.enemies.forEach((enemy) =>{
-            if(this.character.isColliding(enemy) && !this.character.isAboveGround() && !(enemy.isDead)){
+            if(this.character.isColliding(enemy) && !this.character.isAboveGround() 
+            && !(enemy.isDead) && this.character.characterHitCooldown()){
                 this.character.hit();
                 this.healthbar.setPercentage(this.character.energy, this.HEALTHBAR_IMG)
-                console.log(enemy.iD);
             };
             if(this.character.isColliding(enemy) && this.character.isAboveGround()){
                 enemy.hitChicken(this.level, enemy.iD);
-                console.log(enemy.iD);
             }
         })
     }
@@ -120,6 +139,7 @@ class World{
         });
     }
 
+
     checkThrowObjectsCollision(){
         this.level.enemies.forEach(enemy => {
             this.throwableObjects.forEach(bottleThrow => {
@@ -132,7 +152,7 @@ class World{
                         enemy.hitChicken(this.level, enemy.iD);
                         bottleThrow.animateSplash();
                     }
-                    if(enemy instanceof Endboss){
+                    if(enemy instanceof Endboss && this.endbossHitCooldown()){
                         console.log('hit Endboss')
                         
                         //Endbosshealthbar behavior
@@ -143,6 +163,7 @@ class World{
                         bottleThrow.animateSplash();
                         
                         //Endboss behavior
+                        this.getLastEndbossHit();
                         enemy.isHurt();
                         if(this.enbossHealthbar.endbossEnergy <= 0){
                             enemy.isDead();
@@ -160,7 +181,7 @@ class World{
     checkThrowObjects(){
         if(this.keyboard.D && this.bottleCount > 0){
             let bottleThrow = new ThrowableObject(this.character.x + 100, this.character.y + 100, this.character.otherDirection);
-            if(this.cooldown()){
+            if(this.throwCooldown()){
                 this.throwableObjects.push(bottleThrow);
                 console.log(this.throwableObjects.length);
                 this.getLastThrow();
@@ -172,43 +193,65 @@ class World{
     }
 
 
+    throwCooldown(){
+        let timepassed = new Date().getTime() - this.lastThrow; //Difference in ms
+        timepassed = timepassed / 1000; //Difference in s
+        return timepassed > 1.5;
+    }
+
+
     getLastThrow(){
         this.lastThrow = new Date().getTime();
     }
 
-
-    cooldown(){
-        let timepassed = new Date().getTime() - this.lastThrow; //Difference in ms
+    
+    endbossHitCooldown(){
+        let timepassed = new Date().getTime() - this.lastEndbossHit; //Difference in ms
         timepassed = timepassed / 1000; //Difference in s
-        return timepassed > 0.5;
+        return timepassed > 1.5;
+    }
+
+
+    getLastEndbossHit(){
+        this.lastEndbossHit = new Date().getTime();
     }
     
 
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-        this.ctx.translate(this.camera_x, 0); //verschiebt die Kamera nach rechts
         this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.level.clouds);
-        this.addObjectsToMap(this.level.coins);
-        this.addObjectsToMap(this.level.bottles);
-        this.addObjectsToMap(this.throwableObjects);
         
+        if(!(this.level == startScreen) && !(this.level == gameOverScreen)){
+            this.ctx.translate(this.camera_x, 0); //verschiebt die Kamera nach rechts
+            this.addObjectsToMap(this.level.backgroundObjects);
+            this.addObjectsToMap(this.level.enemies);
+            this.addObjectsToMap(this.level.clouds);
+            this.addObjectsToMap(this.level.coins);
+            this.addObjectsToMap(this.level.bottles);
+            this.addObjectsToMap(this.throwableObjects);
+            this.ctx.translate(-this.camera_x, 0); //Back
 
-        //Space for fixed objects
-        this.ctx.translate(-this.camera_x, 0); //Back
-        if(!(this.level == startScreen)){
-            this.addToMap(this.healthbar);
-            this.addToMap(this.coinbar);
-            this.addToMap(this.bottlebar);
-            
-            //TODO - better way to calculate the shown enbossbar
-            if(this.character.x > (this.level.level_end_x - 350)){
-                this.addToMap(this.enbossHealthbar);
+            //Space for fixed objects
+            if(!(this.level == startScreen) && !(this.level == gameOverScreen)){
+                this.addToMap(this.healthbar);
+                this.addToMap(this.coinbar);
+                this.addToMap(this.bottlebar);
+                
+                //TODO - better way to calculate the shown enbossbar
+                if(this.character.x > (this.level.level_end_x - 350)){
+                    this.addToMap(this.enbossHealthbar);
+                }
             }
-        }
-        this.ctx.translate(this.camera_x, 0); //Forwards
+            
+            //Focous camera on character
+            this.ctx.translate(this.camera_x, 0); //Forwards
+            if(!(this.level == startScreen) && !(this.level == gameOverScreen)){
+                this.addToMap(this.character);
+            }
+            this.ctx.translate(-this.camera_x, 0); //verschiebt die Kamera nach links
 
+
+        }
 
         //Objects for Startscreen
         if(this.level == startScreen)
@@ -220,13 +263,11 @@ class World{
             this.addTextObject("Jump =", 380, 400);
             this.addTextObject("Throw = D", 570, 400);
         }
-    
-        if(!(this.level == startScreen)){
-            this.addToMap(this.character);
+
+        if(this.level == gameOverScreen){
+            this.addObjectsToMap(this.level.startscreenObjects);
         }
-        
-        this.ctx.translate(-this.camera_x, 0); //verschiebt die Kamera nach links
-        
+    
 
         self = this //workaround, da this nicht in eine funktion gegeben werden kann. Draw wird immer wieder aufgerufen ohne, dass es crashed
         requestAnimationFrame(function(){

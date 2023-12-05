@@ -54,6 +54,7 @@ class Endboss extends MoveableObject{
 
 
     isHurt(){
+        this.clearEndbossIntervalls();
         this.endbossInterval2 = setInterval(() => {
             this.playAnimation(this.IMAGES_HURT);
         }, 200);
@@ -61,15 +62,20 @@ class Endboss extends MoveableObject{
 
 
     isDead(){
-        this.endbossIntervalIDs.push(this.endbossInterval1);
-        this.endbossIntervalIDs.push(this.endbossInterval2);
-        this.endbossIntervalIDs.forEach(clearInterval);
-       // setInterval(() => {
+        this.clearEndbossIntervalls();
+        setInterval(() => {
             this.playAnimation(this.IMAGES_DEAD);
-        //}, 200);
+        }, 100);
     }
 
 
+    clearEndbossIntervalls(){
+        this.endbossIntervalIDs.push(this.endbossInterval1);
+        this.endbossIntervalIDs.push(this.endbossInterval2);
+        this.endbossIntervalIDs.forEach(clearInterval);
+    }
+
+    
     deleteEndboss(level, endbossId){
         for (let index = 0; index < level.enemies.length; index++) {
             const enemy = level.enemies[index];

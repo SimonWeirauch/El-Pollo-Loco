@@ -17,6 +17,13 @@ function initStartscreen(){
 }
 
 
+function initGameOverScreen(){
+    canvas = document.getElementById('canvas');
+    endLevel();
+    world = new World(canvas, keyboard, gameOverScreen);
+}
+
+
 //document.addEventListener('mouse')
 
 //CanvasRenderingContext2D.isPointInPath())
