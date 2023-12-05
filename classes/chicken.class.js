@@ -58,7 +58,6 @@ class Chicken extends MoveableObject{
         this.chickenIntervalIDs.push(this.chickenInterval1);
         this.chickenIntervalIDs.push(this.chickenInterval2);
         this.chickenIntervalIDs.forEach(clearInterval);
-       
     }
 
 
@@ -69,5 +68,14 @@ class Chicken extends MoveableObject{
                 level.enemies.splice(index, 1);
             }
         }
+    }
+
+
+    hitChicken(level, id){
+        this.chickenDies();
+        this.playChickenDeathAnimation();
+        setTimeout(() => {
+            this.deleteChicken(level, id)
+        }, 500);
     }
 }

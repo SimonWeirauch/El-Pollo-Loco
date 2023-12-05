@@ -70,4 +70,13 @@ class SmallChicken extends MoveableObject{
             }
         }
     }
+
+
+    hitChicken(level, id){
+        this.chickenDies();
+        this.playChickenDeathAnimation();
+        setTimeout(() => {
+            this.deleteChicken(level, id)
+        }, 500);
+    }
 }

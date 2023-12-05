@@ -26,6 +26,15 @@ class World{
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
     ]
 
+    ENDBOSSBAR_IMG = [
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/40.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/60.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/80.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png'
+    ]
+
     character = new Character();
     level;
     ctx;
@@ -35,9 +44,10 @@ class World{
     bottleCount = 0;
     throwableObjects = [];
     lastThrow = new Date().getTime();
-    healthbar = new Statusbar(this.HEALTHBAR_IMG, 100, 0);
-    coinbar = new Statusbar(this.COINBAR_IMG, 0, 50);
-    bottlebar = new Statusbar(this.BOTTLEBAR_IMG, 0, 100);
+    healthbar = new Statusbar(this.HEALTHBAR_IMG, 100, 0, 40);
+    coinbar = new Statusbar(this.COINBAR_IMG, 0, 50, 40);
+    bottlebar = new Statusbar(this.BOTTLEBAR_IMG, 0, 100, 40);
+    enbossHealthbar = new Statusbar(this.ENDBOSSBAR_IMG, 100, 0, 500);
 
     constructor(canvas, keyboard, level){
         this.ctx = canvas.getContext('2d');
@@ -72,12 +82,8 @@ class World{
                 console.log(enemy.iD);
             };
             if(this.character.isColliding(enemy) && this.character.isAboveGround()){
-                enemy.chickenDies();
-                enemy.playChickenDeathAnimation();
+                enemy.hitChicken(this.level, enemy.iD);
                 console.log(enemy.iD);
-                setTimeout(() => {
-                    enemy.deleteChicken(this.level, enemy.iD)
-                }, 500);
             }
         })
     }
@@ -86,7 +92,7 @@ class World{
     checkObjectCollisions(){
         this.checkCoinCollision();
         this.checkBottleCollision();
-        this.checkThrowObjectsCollision2();
+        this.checkThrowObjectsCollision();
     }
 
 
@@ -114,33 +120,46 @@ class World{
         });
     }
 
-
     checkThrowObjectsCollision(){
-        this.throwableObjects.forEach(bottleThrow => {
-            this.level.enemies.forEach(enemy => {
-                if(enemy.isColliding(bottleThrow)){
-                    console.log('hit')
-                }
-            });
-            
-        });
-    }
-
-    checkThrowObjectsCollision2(){
         this.level.enemies.forEach(enemy => {
             this.throwableObjects.forEach(bottleThrow => {
                 if(bottleThrow.isColliding(enemy)){
-                    console.log('hit')
+                    if(enemy instanceof Chicken){
+                        enemy.hitChicken(this.level, enemy.iD);
+                        bottleThrow.animateSplash();
+                    }
+                    if(enemy instanceof SmallChicken){
+                        enemy.hitChicken(this.level, enemy.iD);
+                        bottleThrow.animateSplash();
+                    }
+                    if(enemy instanceof Endboss){
+                        console.log('hit Endboss')
+                        
+                        //Endbosshealthbar behavior
+                        this.enbossHealthbar.emptyEndbossHealthbar();
+                        this.enbossHealthbar.setPercentage(this.enbossHealthbar.endbossEnergy, this.ENDBOSSBAR_IMG);
+                        
+                        //Bottle behavior
+                        bottleThrow.animateSplash();
+                        
+                        //Endboss behavior
+                        enemy.isHurt();
+                        if(this.enbossHealthbar.endbossEnergy <= 0){
+                            enemy.isDead();
+                            setTimeout(() => {
+                                enemy.deleteEndboss(this.level, enemy.iD)
+                            }, 2000);
+                        }
+                    }
                 }
             });
-            
         });
     }
 
 
     checkThrowObjects(){
         if(this.keyboard.D && this.bottleCount > 0){
-            let bottleThrow = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+            let bottleThrow = new ThrowableObject(this.character.x + 100, this.character.y + 100, this.character.otherDirection);
             if(this.cooldown()){
                 this.throwableObjects.push(bottleThrow);
                 console.log(this.throwableObjects.length);
@@ -164,12 +183,6 @@ class World{
         return timepassed > 0.5;
     }
     
-    
-
-
-
-
-
 
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -188,6 +201,11 @@ class World{
             this.addToMap(this.healthbar);
             this.addToMap(this.coinbar);
             this.addToMap(this.bottlebar);
+            
+            //TODO - better way to calculate the shown enbossbar
+            if(this.character.x > (this.level.level_end_x - 350)){
+                this.addToMap(this.enbossHealthbar);
+            }
         }
         this.ctx.translate(this.camera_x, 0); //Forwards
 
@@ -233,11 +251,9 @@ class World{
     addToMap(mo){
         if(mo.otherDirection) {
             this.flipImage(mo);
-
         }
         mo.draw(this.ctx);
         mo.drawFrame(this.ctx);
-
         if(mo.otherDirection) {
             this.flipImageBack(mo);
         }
@@ -256,6 +272,4 @@ class World{
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
-
 }
-
