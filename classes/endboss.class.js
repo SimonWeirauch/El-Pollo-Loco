@@ -3,7 +3,8 @@ class Endboss extends MoveableObject{
     width = 250;
     y = 0
     iD;
-    
+    dead = false;
+
     endbossInterval1;
     endbossInterval2;
     endbossIntervalIDs = [];

@@ -56,10 +56,25 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/idle/I-10.png'
     ]
 
+    IMAGES_LONGIDLE = [
+        'img/2_character_pepe/1_idle/long_idle/I-11.png',
+        'img/2_character_pepe/1_idle/long_idle/I-12.png',
+        'img/2_character_pepe/1_idle/long_idle/I-13.png',
+        'img/2_character_pepe/1_idle/long_idle/I-14.png',
+        'img/2_character_pepe/1_idle/long_idle/I-15.png',
+        'img/2_character_pepe/1_idle/long_idle/I-16.png',
+        'img/2_character_pepe/1_idle/long_idle/I-17.png',
+        'img/2_character_pepe/1_idle/long_idle/I-18.png',
+        'img/2_character_pepe/1_idle/long_idle/I-19.png',
+        'img/2_character_pepe/1_idle/long_idle/I-20.png'
+    ]
+
 
     world;
     walking_sound = new Audio('audio/running.mp3');
+    jump_sound = new Audio('audio/jump.mp3');
     lastHit = 0;
+    lastAction = new Date().getTime();
 
     constructor(){
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -68,6 +83,7 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_LONGIDLE);
         this.applyGravity();
         this.animate();
     }
@@ -81,16 +97,20 @@ class Character extends MoveableObject {
                 this.moveRight();
                 this.otherDirection = false;
                 this.walking_sound.play();
+                this.getLastAction();
             }
 
             if(this.world.keyboard.LEFT && this.x > 0){
                 this.moveLeft();
                 this.otherDirection = true;
                 this.walking_sound.play();
+                this.getLastAction();
             }
 
             if(this.world.keyboard.SPACE && !this.isAboveGround()){
                 this.jump();
+                this.jump_sound.play();
+                this.getLastAction();
             }
 
             this.world.camera_x = -this.x + 100;
@@ -112,18 +132,21 @@ class Character extends MoveableObject {
                 //Walk animation
                 this.playAnimation(this.IMAGES_WALKING);
             }
+            else if(this.activateLongIdle()){
+                this.playAnimation(this.IMAGES_LONGIDLE);
+            }
             else{
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 50);
     }
 
+
     characterHitCooldown(){
         let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
         timepassed = timepassed / 1000; //Difference in s
         return timepassed > 1.5;
     }
-
 
 
     hit(){
@@ -148,5 +171,17 @@ class Character extends MoveableObject {
         let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
         timepassed = timepassed / 1000; //Difference in s
         return timepassed < 1.5;
+    }
+
+
+    activateLongIdle(){
+        let timepassed = new Date().getTime() - this.lastAction; //Difference in ms
+        timepassed = timepassed / 1000; //Difference in s
+        return timepassed > 2;
+    }
+
+
+    getLastAction(){
+        this.lastAction = new Date().getTime();
     }
 }

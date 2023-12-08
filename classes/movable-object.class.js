@@ -5,9 +5,8 @@ class MoveableObject extends DrawableObject{
     speedY = 0;
     acceleration = 2.5;
     CharacterOffsetY = -20;
-    ObjectOffsetY = 0;       //-170 //TODO - Check Offset for Collision
-    
-    ObjectOffsetX = 0;        //-40
+    ObjectOffsetY;       //-170 //TODO - Check Offset for Collision
+    ObjectOffsetX;        //-40
     
     
     
@@ -33,6 +32,18 @@ class MoveableObject extends DrawableObject{
 
 
     isColliding(mo){
+        if(mo instanceof Chicken || mo instanceof SmallChicken){
+            this.ObjectOffsetY = -20;      
+            this.ObjectOffsetX = -20; 
+        }
+        else if(mo instanceof Endboss){
+            this.ObjectOffsetY = -250;      
+            this.ObjectOffsetX = -100;  
+        }
+        else{
+            this.ObjectOffsetY = -170;      
+            this.ObjectOffsetX = -50; 
+        } 
         return (this.x + this.width + this.ObjectOffsetX) >= mo.x &&
         this.x + this.ObjectOffsetX <= (mo.x + mo.width) &&
         (this.y + this.CharacterOffsetY + this.height) >= mo.y &&
@@ -70,6 +81,15 @@ class MoveableObject extends DrawableObject{
 
     jump(){
         this.speedY = 30;
+    }
+
+    smallJump(){
+        this.speedY = 15
+    }
+
+    //TODO - Better way to resolve blowback
+    blowback(){
+        this.x -= 70;
     }
    
 }

@@ -43,7 +43,19 @@ class World{
     camera_x = 0;
     bottleCount = 0;
     throwableObjects = [];
+    gameover = false;
     
+    throw_sound = new Audio('audio/throw2.mp3');
+    coin_sound = new Audio('audio/coin.mp3');
+    characterHit_sound = new Audio('audio/characterHit.mp3');
+    brokenBottle_sound = new Audio('audio/brokenBottle.mp3');
+    enemyHit_sound = new Audio('audio/enemyHit.mp3');
+    background_sound = new Audio('audio/backgroundMusic.mp3');
+    collectBottle_sound = new Audio('audio/collectBottle.mp3');
+    isBackgroundSoundOn = false;
+
+    
+
     lastThrow = new Date().getTime();
     lastEndbossHit =  new Date().getTime();
     
@@ -60,6 +72,7 @@ class World{
         this.setWorld();
         this.draw();
         this.run();
+
     }
 
 
@@ -71,14 +84,20 @@ class World{
     run(){
         setInterval(() => {
             if(this.gameOver()){
-                //this.character.walking_sound = null;
-                //initStartscreen();
-                initGameOverScreen();
+                this.gameover = true;
             }
             else{
                 this.checkEnemyCollisions();
                 this.checkObjectCollisions();
                 this.checkThrowObjects();
+                
+
+                //TODO - Backgroundmusic loop
+                if(!((this.level == startScreen) && !(this.isBackgroundSoundOn))){
+                    this.background_sound.play();
+                    this.background_sound.loop = true;
+                    this.isBackgroundSoundOn = true;
+                }
             }
 
         }, 1000/60);  //TODO - Gamespeed FPS settings if it doesnt run smoothly
@@ -98,11 +117,15 @@ class World{
         this.level.enemies.forEach((enemy) =>{
             if(this.character.isColliding(enemy) && !this.character.isAboveGround() 
             && !(enemy.isDead) && this.character.characterHitCooldown()){
+                this.characterHit_sound.play();
                 this.character.hit();
+                this.character.blowback();
                 this.healthbar.setPercentage(this.character.energy, this.HEALTHBAR_IMG)
             };
-            if(this.character.isColliding(enemy) && this.character.isAboveGround()){
+            if(this.character.isColliding(enemy) && this.character.isAboveGround() && !(enemy.isDead)){
                 enemy.hitChicken(this.level, enemy.iD);
+                this.enemyHit_sound.play();
+                this.character.smallJump();
             }
         })
     }
@@ -118,6 +141,7 @@ class World{
     checkCoinCollision(){
         this.level.coins.forEach(coin => {
             if(this.character.isColliding(coin)){
+                this.coin_sound.play();
                 this.coinbar.fillCoinbar();
                 this.coinbar.setPercentage(this.coinbar.coinEnergy, this.COINBAR_IMG);
                 setTimeout(() => {
@@ -133,6 +157,7 @@ class World{
             if(this.character.isColliding(bottle)){
                 this.bottlebar.fillBottlebar();
                 this.bottleCount++;
+                this.collectBottle_sound.play();
                 this.bottlebar.setPercentage(this.bottlebar.bottleEnergy, this.BOTTLEBAR_IMG);
                 bottle.deleteBottle(this.level, bottle.iD);
             }
@@ -147,10 +172,12 @@ class World{
                     if(enemy instanceof Chicken){
                         enemy.hitChicken(this.level, enemy.iD);
                         bottleThrow.animateSplash();
+                        this.brokenBottle_sound.play();
                     }
                     if(enemy instanceof SmallChicken){
                         enemy.hitChicken(this.level, enemy.iD);
                         bottleThrow.animateSplash();
+                        this.brokenBottle_sound.play();
                     }
                     if(enemy instanceof Endboss && this.endbossHitCooldown()){
                         console.log('hit Endboss')
@@ -161,6 +188,7 @@ class World{
                         
                         //Bottle behavior
                         bottleThrow.animateSplash();
+                        this.brokenBottle_sound.play();
                         
                         //Endboss behavior
                         this.getLastEndbossHit();
@@ -170,6 +198,13 @@ class World{
                             setTimeout(() => {
                                 enemy.deleteEndboss(this.level, enemy.iD)
                             }, 2000);
+                            
+                            //TODO Reset gamestate = clear all loops
+                            setTimeout(() => {
+                                this.level = startScreen; //Change level to next
+                                this.background_sound.setAttribute('src', "audio/silence.mp3");
+                                
+                            }, 4000);
                         }
                     }
                 }
@@ -184,7 +219,9 @@ class World{
             if(this.throwCooldown()){
                 this.throwableObjects.push(bottleThrow);
                 console.log(this.throwableObjects.length);
+                this.character.getLastAction();
                 this.getLastThrow();
+                this.throw_sound.play();
                 this.bottleCount--;
                 this.bottlebar.emptyBottlebar();
                 this.bottlebar.setPercentage(this.bottlebar.bottleEnergy, this.BOTTLEBAR_IMG);
@@ -221,18 +258,25 @@ class World{
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.addObjectsToMap(this.level.backgroundObjects);
         
-        if(!(this.level == startScreen) && !(this.level == gameOverScreen)){
-            this.ctx.translate(this.camera_x, 0); //verschiebt die Kamera nach rechts
+        if(!(this.level == startScreen)){
+            if(!(this.gameover)){
+                this.ctx.translate(this.camera_x, 0); //verschiebt die Kamera nach rechts
+            }
+
             this.addObjectsToMap(this.level.backgroundObjects);
             this.addObjectsToMap(this.level.enemies);
             this.addObjectsToMap(this.level.clouds);
             this.addObjectsToMap(this.level.coins);
             this.addObjectsToMap(this.level.bottles);
             this.addObjectsToMap(this.throwableObjects);
-            this.ctx.translate(-this.camera_x, 0); //Back
+            
+            if(!(this.gameover)){
+                this.ctx.translate(-this.camera_x, 0); //Back
+            }
+            
 
             //Space for fixed objects
-            if(!(this.level == startScreen) && !(this.level == gameOverScreen)){
+            if(!(this.level == startScreen)){
                 this.addToMap(this.healthbar);
                 this.addToMap(this.coinbar);
                 this.addToMap(this.bottlebar);
@@ -245,7 +289,7 @@ class World{
             
             //Focous camera on character
             this.ctx.translate(this.camera_x, 0); //Forwards
-            if(!(this.level == startScreen) && !(this.level == gameOverScreen)){
+            if(!(this.level == startScreen) && !(this.gameover)){
                 this.addToMap(this.character);
             }
             this.ctx.translate(-this.camera_x, 0); //verschiebt die Kamera nach links
@@ -264,9 +308,10 @@ class World{
             this.addTextObject("Throw = D", 570, 400);
         }
 
-        if(this.level == gameOverScreen){
+        if(this.gameover){
             this.addObjectsToMap(this.level.startscreenObjects);
         }
+
     
 
         self = this //workaround, da this nicht in eine funktion gegeben werden kann. Draw wird immer wieder aufgerufen ohne, dass es crashed

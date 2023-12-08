@@ -1,6 +1,6 @@
 class StartscreenObject extends DrawableObject{
-    width = 50;
-    height = 50;
+    width;
+    height;
     x;
     y;
     
@@ -9,5 +9,7 @@ class StartscreenObject extends DrawableObject{
         super().loadImage(imagePath);
         this.x = x;
         this.y = y;
+        this.height = height;
+        this.width = width;
     }
 }
