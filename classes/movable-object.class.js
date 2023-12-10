@@ -5,8 +5,8 @@ class MoveableObject extends DrawableObject{
     speedY = 0;
     acceleration = 2.5;
     CharacterOffsetY = -20;
-    ObjectOffsetY;       //-170 //TODO - Check Offset for Collision
-    ObjectOffsetX;        //-40
+    ObjectOffsetY;       
+    ObjectOffsetX;       
     
     
     
@@ -32,6 +32,8 @@ class MoveableObject extends DrawableObject{
 
 
     isColliding(mo){
+        
+        //Function Get offset parameter
         if(mo instanceof Chicken || mo instanceof SmallChicken){
             this.ObjectOffsetY = -20;      
             this.ObjectOffsetX = -20; 
@@ -44,6 +46,8 @@ class MoveableObject extends DrawableObject{
             this.ObjectOffsetY = -170;      
             this.ObjectOffsetX = -50; 
         } 
+
+
         return (this.x + this.width + this.ObjectOffsetX) >= mo.x &&
         this.x + this.ObjectOffsetX <= (mo.x + mo.width) &&
         (this.y + this.CharacterOffsetY + this.height) >= mo.y &&

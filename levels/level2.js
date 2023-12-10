@@ -1,15 +1,17 @@
-let level1;
+let level2;
 
-function initLevel1(){
-    level1 = new Level(
+function initLevel2(){
+    level2 = new Level(
         [
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
             new Chicken(),
             new Chicken(),
             new Chicken(),
             new Endboss(),
             new SmallChicken(),
-            new SmallChicken(),
-            new SmallChicken(),
+
         ],
         [
             new Cloud()

@@ -37,6 +37,8 @@ class World{
 
     character = new Character();
     level;
+    
+    
     ctx;
     canvas;
     keyboard;
@@ -52,6 +54,8 @@ class World{
     enemyHit_sound = new Audio('audio/enemyHit.mp3');
     background_sound = new Audio('audio/backgroundMusic.mp3');
     collectBottle_sound = new Audio('audio/collectBottle.mp3');
+    
+    
     isBackgroundSoundOn = false;
 
     
@@ -94,9 +98,9 @@ class World{
 
                 //TODO - Backgroundmusic loop
                 if(!((this.level == startScreen) && !(this.isBackgroundSoundOn))){
-                    this.background_sound.play();
-                    this.background_sound.loop = true;
-                    this.isBackgroundSoundOn = true;
+                    //this.background_sound.play();
+                    //this.background_sound.loop = true;
+                    //this.isBackgroundSoundOn = true;
                 }
             }
 
@@ -109,8 +113,10 @@ class World{
     }
 
     //TODO - Clear all Intervalls (Audio and Animations)
-    cancelAllIntervalls(){
-        
+    clearAllIntervalls(){
+        for(let i = 1; i < 999; i++){
+            window.clearInterval(i);
+        }
     }
 
     checkEnemyCollisions(){
@@ -168,7 +174,7 @@ class World{
     checkThrowObjectsCollision(){
         this.level.enemies.forEach(enemy => {
             this.throwableObjects.forEach(bottleThrow => {
-                if(bottleThrow.isColliding(enemy)){
+                if(bottleThrow.isColliding(enemy) && !(enemy.isDead)){
                     if(enemy instanceof Chicken){
                         enemy.hitChicken(this.level, enemy.iD);
                         bottleThrow.animateSplash();
@@ -194,16 +200,17 @@ class World{
                         this.getLastEndbossHit();
                         enemy.isHurt();
                         if(this.enbossHealthbar.endbossEnergy <= 0){
-                            enemy.isDead();
+                            enemy.isDead = true;
+                            enemy.deathAnimation();
                             setTimeout(() => {
                                 enemy.deleteEndboss(this.level, enemy.iD)
                             }, 2000);
                             
-                            //TODO Reset gamestate = clear all loops
+                            //EndGame
                             setTimeout(() => {
-                                this.level = startScreen; //Change level to next
-                                this.background_sound.setAttribute('src', "audio/silence.mp3");
-                                
+                                this.clearAllIntervalls();
+                                //TODO - Hier gehts weiter!
+                                loadNextLevel(this.level);
                             }, 4000);
                         }
                     }
@@ -282,7 +289,7 @@ class World{
                 this.addToMap(this.bottlebar);
                 
                 //TODO - better way to calculate the shown enbossbar
-                if(this.character.x > (this.level.level_end_x - 350)){
+                if(this.character.x > (this.level.level_end_x - 750)){
                     this.addToMap(this.enbossHealthbar);
                 }
             }

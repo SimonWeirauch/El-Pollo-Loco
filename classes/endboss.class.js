@@ -3,7 +3,7 @@ class Endboss extends MoveableObject{
     width = 250;
     y = 0
     iD;
-    dead = false;
+    isDead = false;
 
     endbossInterval1;
     endbossInterval2;
@@ -62,7 +62,7 @@ class Endboss extends MoveableObject{
     }
 
 
-    isDead(){
+    deathAnimation(){
         this.clearEndbossIntervalls();
         setInterval(() => {
             this.playAnimation(this.IMAGES_DEAD);
