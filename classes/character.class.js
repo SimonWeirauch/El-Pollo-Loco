@@ -3,7 +3,6 @@ class Character extends MoveableObject {
     y = 0;
     speed = 10;
     energy = 100;
-   
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -12,7 +11,6 @@ class Character extends MoveableObject {
         'img/2_character_pepe/2_walk/W-25.png',
         'img/2_character_pepe/2_walk/W-26.png'
     ];
-
     IMAGES_JUMPING = [
         'img/2_character_pepe/3_jump/J-31.png',
         'img/2_character_pepe/3_jump/J-32.png',
@@ -24,7 +22,6 @@ class Character extends MoveableObject {
         'img/2_character_pepe/3_jump/J-38.png',
         'img/2_character_pepe/3_jump/J-39.png'       
     ];
-
     IMAGES_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
         'img/2_character_pepe/5_dead/D-52.png',
@@ -34,15 +31,11 @@ class Character extends MoveableObject {
         'img/2_character_pepe/5_dead/D-56.png',
         'img/2_character_pepe/5_dead/D-57.png'
     ]
-
-
     IMAGES_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png'
     ]
-
-    
     IMAGES_IDLE = [
         'img/2_character_pepe/1_idle/idle/I-1.png',
         'img/2_character_pepe/1_idle/idle/I-2.png',
@@ -55,7 +48,6 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/idle/I-9.png',
         'img/2_character_pepe/1_idle/idle/I-10.png'
     ]
-
     IMAGES_LONGIDLE = [
         'img/2_character_pepe/1_idle/long_idle/I-11.png',
         'img/2_character_pepe/1_idle/long_idle/I-12.png',
@@ -68,14 +60,16 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/long_idle/I-19.png',
         'img/2_character_pepe/1_idle/long_idle/I-20.png'
     ]
-
-
     world;
     walking_sound = new Audio('audio/running.mp3');
     jump_sound = new Audio('audio/jump.mp3');
     lastHit = 0;
     lastAction = new Date().getTime();
 
+
+    /**
+     * creates a character object
+     */
     constructor(){
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -89,9 +83,11 @@ class Character extends MoveableObject {
     }
 
 
+    /**
+     * animate the movement of a character object
+     */
     animate(){
         setInterval(() => {
-            //Move character
             this.walking_sound.pause();
             if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x){
                 this.moveRight();
@@ -99,24 +95,20 @@ class Character extends MoveableObject {
                 this.walking_sound.play();
                 this.getLastAction();
             }
-
             if(this.world.keyboard.LEFT && this.x > 0){
                 this.moveLeft();
                 this.otherDirection = true;
                 this.walking_sound.play();
                 this.getLastAction();
             }
-
             if(this.world.keyboard.SPACE && !this.isAboveGround()){
                 this.jump();
                 this.jump_sound.play();
                 this.getLastAction();
             }
-
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
-
-
+        
         setInterval(() => {
             if(this.isDead()){
                 this.playAnimation(this.IMAGES_DEAD);
@@ -125,11 +117,9 @@ class Character extends MoveableObject {
                 this.playAnimation(this.IMAGES_HURT);
             }
             else if(this.isAboveGround()){
-                //fall animation
                 this.playAnimation(this.IMAGES_JUMPING);
             }
             else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT){
-                //Walk animation
                 this.playAnimation(this.IMAGES_WALKING);
             }
             else if(this.activateLongIdle()){
@@ -142,16 +132,12 @@ class Character extends MoveableObject {
     }
 
 
-    characterHitCooldown(){
-        let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
-        timepassed = timepassed / 1000; //Difference in s
-        return timepassed > 1.5;
-    }
-
-
+    /**
+     * calculates the current energy of the character if the character is hit
+     * by an enemy
+     */
     hit(){
         console.log('character hit');
-        
         this.energy -= 20;
         if(this.energy < 0){
             this.energy = 0;
@@ -162,11 +148,32 @@ class Character extends MoveableObject {
     }
 
 
+    /**
+     * returns a bool depending on the current character energy
+     * @returns bool
+     */
     isDead(){
         return this.energy == 0;
     }
 
 
+    /**
+     * returns a bool depending on the time difference beetween the "lastHit"  
+     * and the timepasssed since this function was called
+     * @returns bool
+     */
+    characterHitCooldown(){
+        let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
+        timepassed = timepassed / 1000; //Difference in s
+        return timepassed > 1.5;
+    }
+
+
+    /**
+     * returns a bool depending on the time difference beetween the "lastHit"  
+     * and the timepasssed since this function was called
+     * @returns bool
+     */
     isHurt(){
         let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
         timepassed = timepassed / 1000; //Difference in s
@@ -174,6 +181,11 @@ class Character extends MoveableObject {
     }
 
 
+    /**
+     * returns a bool depending on the time difference beetween the "lastAction"  
+     * and the timepasssed since this function was called
+     * @returns bool
+     */
     activateLongIdle(){
         let timepassed = new Date().getTime() - this.lastAction; //Difference in ms
         timepassed = timepassed / 1000; //Difference in s
@@ -181,6 +193,9 @@ class Character extends MoveableObject {
     }
 
 
+    /**
+     * saves the last time a relevant button is pressed which triggers a character movement
+     */
     getLastAction(){
         this.lastAction = new Date().getTime();
     }

@@ -7,7 +7,6 @@ class World{
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
     ]
-
     COINBAR_IMG = [
         'img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png',
         'img/7_statusbars/1_statusbar/1_statusbar_coin/green/20.png',
@@ -16,7 +15,6 @@ class World{
         'img/7_statusbars/1_statusbar/1_statusbar_coin/green/80.png',
         'img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png'
     ]
-
     BOTTLEBAR_IMG = [
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/20.png',
@@ -25,7 +23,6 @@ class World{
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
     ]
-
     ENDBOSSBAR_IMG = [
         'img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png',
         'img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png',
@@ -34,11 +31,8 @@ class World{
         'img/7_statusbars/1_statusbar/2_statusbar_health/orange/80.png',
         'img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png'
     ]
-
     character = new Character();
     level;
-    
-    
     ctx;
     canvas;
     keyboard;
@@ -54,9 +48,6 @@ class World{
     enemyHit_sound = new Audio('audio/enemyHit.mp3');
     background_sound = new Audio('audio/backgroundMusic.mp3');
     collectBottle_sound = new Audio('audio/collectBottle.mp3');
-    
-    
-    isBackgroundSoundOn = false;
 
     
 
@@ -76,7 +67,6 @@ class World{
         this.setWorld();
         this.draw();
         this.run();
-
     }
 
 
@@ -87,6 +77,9 @@ class World{
 
     run(){
         setInterval(() => {
+            if(this.keyboard.F){
+                fullscreen();
+            }
             if(this.gameOver()){
                 this.gameover = true;
             }
@@ -94,16 +87,7 @@ class World{
                 this.checkEnemyCollisions();
                 this.checkObjectCollisions();
                 this.checkThrowObjects();
-                
-
-                //TODO - Backgroundmusic loop
-                if(!((this.level == startScreen) && !(this.isBackgroundSoundOn))){
-                    //this.background_sound.play();
-                    //this.background_sound.loop = true;
-                    //this.isBackgroundSoundOn = true;
-                }
             }
-
         }, 1000/60);  //TODO - Gamespeed FPS settings if it doesnt run smoothly
     }
 
@@ -205,11 +189,8 @@ class World{
                             setTimeout(() => {
                                 enemy.deleteEndboss(this.level, enemy.iD)
                             }, 2000);
-                            
-                            //EndGame
                             setTimeout(() => {
                                 this.clearAllIntervalls();
-                                //TODO - Hier gehts weiter!
                                 loadNextLevel(this.level);
                             }, 4000);
                         }
@@ -308,7 +289,7 @@ class World{
         if(this.level == startScreen)
         {
             this.addObjectsToMap(this.level.startscreenObjects);
-            //TODO New add to map function for textObjects?
+            //TODO New add to map function for textObjects? for level class?
             this.addTextObject("Left =", 40, 400);
             this.addTextObject("Right =", 200, 400);
             this.addTextObject("Jump =", 380, 400);

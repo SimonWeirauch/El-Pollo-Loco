@@ -4,27 +4,31 @@ class DrawableObject {
     currentImage = 0;
     x = 120;
     y = 230;
-   
-   
     height = 150;
     width = 100;
 
     /**
-     * image path für das laden eines unbeweglichen BSildes
-     * @param {*} path 
+     * loads the drawable image
+     * @param {string} path path of the image
      */
     loadImage(path){
         this.img = new Image();
         this.img.src = path;
     }
 
+    
+    /**
+     * draws an image on the canvas
+     * @param {property of canvas} ctx getContext function of the canvas HTML-element
+     */
     draw(ctx){
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height)
     }
 
+
     /**
-    * Für das laden der Bilder des Movements
-    * @param {Array} arr ['img/image1.png', 'img/image2.png', ...]
+    * loads all images of the given array
+    * @param {Array} arr array with all the images that will be loaded
     */
     loadImages(arr){
         arr.forEach((path) => {
@@ -35,6 +39,10 @@ class DrawableObject {
     }
 
 
+    /**
+     * draws a frame around the various class objects for testing purposes
+     * @param {property of canvas} ctx getContext function of the canvas HTML-element
+     */
     drawFrame(ctx){
         if(this instanceof Character || this instanceof Chicken || this instanceof Coin
             || this instanceof Bottle || this instanceof SmallChicken || this instanceof Endboss

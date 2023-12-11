@@ -6,6 +6,9 @@ let isLevelObjectsCleared = false;
 background_sound = new Audio('audio/backgroundMusic.mp3');
 
 
+/**
+ * initializes level 1 
+ */
 function init(){
     canvas = document.getElementById('canvas');
     initLevel1();
@@ -15,6 +18,9 @@ function init(){
 }
 
 
+/**
+ * initializes level 1
+ */
 function loadNextLevel(level){                     
     if(level == level1){
         initNextLevel('level1');
@@ -25,6 +31,9 @@ function loadNextLevel(level){
 }
 
 
+/**
+ * initializes the next level
+ */
 function initNextLevel(levelString){
     canvas = document.getElementById('canvas');
     determineNextLevel(levelString);
@@ -32,17 +41,24 @@ function initNextLevel(levelString){
 }
 
 
+/**
+ * determines next level according to the provided levelString
+ * @param {String} levelString 
+ */
 function determineNextLevel(levelString){
     if(levelString == 'level1' ){
         initLevel2();
         world = new World(canvas, keyboard, level2);
     }
     if(levelString == 'level2'){
-        initStartscreen(); //only this for startscreen
+        initStartscreen();
     }
 }
 
 
+/**
+ * initializes startscreen
+ */
 function initStartscreen(){
     canvas = document.getElementById('canvas');
     startLevel();
@@ -53,6 +69,9 @@ function initStartscreen(){
 }
 
 
+/**
+ * clears all objects of the current level before loading the objects for the next
+ */
 function clearLevelObjects(){
     if(isLevelObjectsCleared){
         world.level.enemies.splice(0, world.level.enemies.length),
@@ -69,6 +88,9 @@ function clearLevelObjects(){
 }
 
 
+/**
+ * controls the music played in the background
+ */
 function controlBackgroundAudio(){
     if(isBackgroundSoundOff){
         background_sound.load('audio/backgroundMusic.mp3');
@@ -79,81 +101,89 @@ function controlBackgroundAudio(){
 }
 
 
-//document.addEventListener('mouse')
-
-//CanvasRenderingContext2D.isPointInPath())
-
+/**
+ * controls status of keys, when key is pressed
+ */
 document.addEventListener('keydown', (event) => {
     if(event.keyCode == 39){
         keyboard.RIGHT = true;
     }
-
     if(event.keyCode == 37){
         keyboard.LEFT = true;
     }
-
     if(event.keyCode == 38){
         keyboard.UP = true;
     }
-
     if(event.keyCode == 40){
         keyboard.DOWN = true;
     }
-
     if(event.keyCode == 32){
         keyboard.SPACE = true;
     }
-
     if(event.keyCode == 68){
         keyboard.D = true;
+    }
+    if(event.keyCode == 70){
+        keyboard.F = true;
     }
 })
 
 
+/**
+ * controls status of keys, when key is released
+ */
 document.addEventListener('keyup', (event) => {
     if(event.keyCode == 39){
         keyboard.RIGHT = false;
     }
-
     if(event.keyCode == 37){
         keyboard.LEFT = false;
     }
-
     if(event.keyCode == 38){
         keyboard.UP = false;
     }
-
     if(event.keyCode == 40){
         keyboard.DOWN = false;
     }
-
     if(event.keyCode == 32){
         keyboard.SPACE = false;
     }
-
     if(event.keyCode == 68){
         keyboard.D = false;
+    }
+    if(event.keyCode == 70){
+        keyboard.F = false;
     }
 })
 
 
+/**
+ * opens fullscreen
+ */
 function fullscreen(){
-    let fullscreen = document.getElementById('fullscreen');
+    let fullscreen = document.getElementById('canvas');
     enterFullscreen(fullscreen);
 }
 
 
+/**
+ * opens fullscreen on given HTMLElement
+ * @param {HTMLElement} element 
+ */
 function enterFullscreen(element) {
     if(element.requestFullscreen) {
       element.requestFullscreen();
-    } else if(element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+    } else if(element.msRequestFullscreen) {    
       element.msRequestFullscreen();
-    } else if(element.webkitRequestFullscreen) {  // iOS Safari
+    } else if(element.webkitRequestFullscreen) {
       element.webkitRequestFullscreen();
     }
   }
 
 
+  /**
+   * close fullscreen mode
+   */
   function exitFullscreen() {
     if(document.exitFullscreen) {
       document.exitFullscreen();
@@ -161,4 +191,3 @@ function enterFullscreen(element) {
       document.webkitExitFullscreen();
     }
   }
-  

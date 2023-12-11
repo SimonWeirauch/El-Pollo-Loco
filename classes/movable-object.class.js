@@ -8,9 +8,9 @@ class MoveableObject extends DrawableObject{
     ObjectOffsetY;       
     ObjectOffsetX;       
     
-    
-    
-
+    /**
+     * reduces the y-position if character is in the air
+     */
     applyGravity(){
         setInterval(() => {
             if(this.isAboveGround() || this.speedY > 0){
@@ -21,19 +21,38 @@ class MoveableObject extends DrawableObject{
     }
 
 
+    /**
+     * checks if an object is above the ground
+     * @returns bool 
+     */
     isAboveGround(){
         if(this instanceof ThrowableObject){ //Throwable object should always fall
             return true;
         } else{
             return this.y < 100;
         }
-       
     }
 
 
+    /**
+     * checks if a moveable object collides with another object
+     * @param {object} mo moveable object 
+     * @returns bool if two objects are colliding
+     */
     isColliding(mo){
-        
-        //Function Get offset parameter
+        this.getOffsetParameter(mo);
+        return (this.x + this.width + this.ObjectOffsetX) >= mo.x &&
+        this.x + this.ObjectOffsetX <= (mo.x + mo.width) &&
+        (this.y + this.CharacterOffsetY + this.height) >= mo.y &&
+        (this.y + this.CharacterOffsetY) <= (mo.y + mo.height + this.ObjectOffsetY);
+    }
+
+
+    /**
+     * sets the x and y offset parameter of the moveable object
+     * @param {object} mo an instance of a moveable object
+     */
+    getOffsetParameter(mo){
         if(mo instanceof Chicken || mo instanceof SmallChicken){
             this.ObjectOffsetY = -20;      
             this.ObjectOffsetX = -20; 
@@ -46,26 +65,13 @@ class MoveableObject extends DrawableObject{
             this.ObjectOffsetY = -170;      
             this.ObjectOffsetX = -50; 
         } 
-
-
-        return (this.x + this.width + this.ObjectOffsetX) >= mo.x &&
-        this.x + this.ObjectOffsetX <= (mo.x + mo.width) &&
-        (this.y + this.CharacterOffsetY + this.height) >= mo.y &&
-        (this.y + this.CharacterOffsetY) <= (mo.y + mo.height + this.ObjectOffsetY);
-      
-        
-        /*
-        Original
-        this.x + this.width > mo.x &&
-        this.y + this.height > mo.y &&
-        this.x < mo.x &&
-        this.y < mo.y + mo.height
-        
-        */
     }
 
 
-
+    /**
+     * displays the animation of a image array
+     * @param {array} images array of the images that will be displayed
+     */
     playAnimation(images){
         let i = this.currentImage % images.length;
         let path = images[i];
@@ -73,27 +79,44 @@ class MoveableObject extends DrawableObject{
         this.currentImage++;
     }
 
+
+    /**
+    * increases the x-position of the character to move right
+    */
     moveRight(){
-        this.x += this.speed;
-        
+        this.x += this.speed;  
     }
 
+
+    /**
+    * reduces the x-position of the character to move left
+    */
     moveLeft(){
-        this.x -= this.speed;
-        
+        this.x -= this.speed; 
     }
 
+
+    /**
+     * sets the speed of the movement of the y-position
+     */
     jump(){
         this.speedY = 30;
     }
 
+
+    /**
+     * sets the speed of the movement of the y-position
+     */
     smallJump(){
         this.speedY = 15
     }
 
-    //TODO - Better way to resolve blowback
+
+    /**
+     * reduces the x-position of the character if the character
+     * is hit by an enemy
+     */
     blowback(){
         this.x -= 70;
     }
-   
 }

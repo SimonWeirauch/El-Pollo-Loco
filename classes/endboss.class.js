@@ -4,11 +4,9 @@ class Endboss extends MoveableObject{
     y = 0
     iD;
     isDead = false;
-
     endbossInterval1;
     endbossInterval2;
     endbossIntervalIDs = [];
-
     IMAGES_ALERT = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
         'img/4_enemie_boss_chicken/2_alert/G6.png',
@@ -19,15 +17,11 @@ class Endboss extends MoveableObject{
         'img/4_enemie_boss_chicken/2_alert/G11.png',
         'img/4_enemie_boss_chicken/2_alert/G12.png'
     ]
-
-
     IMAGES_HURT = [
         'img/4_enemie_boss_chicken/4_hurt/G21.png',
         'img/4_enemie_boss_chicken/4_hurt/G22.png',
         'img/4_enemie_boss_chicken/4_hurt/G23.png'
     ]
-
-
     IMAGES_DEAD = [
         'img/4_enemie_boss_chicken/5_dead/G24.png',
         'img/4_enemie_boss_chicken/5_dead/G25.png',
@@ -35,18 +29,23 @@ class Endboss extends MoveableObject{
     ]
 
 
+    /**
+     * creates an endboss object
+     */
     constructor(){
         super().loadImage(this.IMAGES_ALERT[0]);
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.iD = 100 + Math.random() * 700;
-
         this.x = 2500;
         this.animate();
     }
 
-
+    
+    /**
+     * animate the alert status of an endboss object
+     */
     animate(){
         this.endbossInterval1 = setInterval(() => {
             this.playAnimation(this.IMAGES_ALERT);
@@ -54,6 +53,9 @@ class Endboss extends MoveableObject{
     }
 
 
+    /**
+     * animate the "isHurt" status of an endboss object
+     */
     isHurt(){
         this.clearEndbossIntervalls();
         this.endbossInterval2 = setInterval(() => {
@@ -62,6 +64,9 @@ class Endboss extends MoveableObject{
     }
 
 
+    /**
+     * animate the death animation of an endboss object
+     */
     deathAnimation(){
         this.clearEndbossIntervalls();
         setInterval(() => {
@@ -70,6 +75,9 @@ class Endboss extends MoveableObject{
     }
 
 
+    /**
+     * clears the previous intervalls of the movement animation from the endboss
+     */
     clearEndbossIntervalls(){
         this.endbossIntervalIDs.push(this.endbossInterval1);
         this.endbossIntervalIDs.push(this.endbossInterval2);
@@ -77,6 +85,11 @@ class Endboss extends MoveableObject{
     }
 
     
+    /**
+     * deletes the endboss object
+     * @param {Object} level current level object
+     * @param {integer} endbossId the id of the endboss object that will be deleted
+     */
     deleteEndboss(level, endbossId){
         for (let index = 0; index < level.enemies.length; index++) {
             const enemy = level.enemies[index];

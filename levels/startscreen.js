@@ -1,5 +1,8 @@
 let startScreen;
 
+/**
+ * Loads all objects for the startscreen
+ */
 function startLevel(){
     startScreen = new Level(
         [
@@ -23,7 +26,6 @@ function startLevel(){
             new StartscreenObject('img/10_background_page/fullscreen.png', 650, 10, 50, 50),
             new StartscreenObject('img/10_background_page/soundOn.png', 580, 10, 50, 50),
             new StartscreenObject('img/10_background_page/start.png', 50, 10, 50, 50),
-            //new StartscreenObject('img/10_background_page/soundOff.png', 580, 10),
         ]
     )
 
