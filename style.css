@@ -11,9 +11,14 @@ canvas {
     cursor: pointer;
 }
 
+h1 {
+    font-family: ZABRAS;
+    font-size: 56px;
+    color: black;
+}
 
 .background{
-    background-image: url('img/10_background_page/desert-6814275_640.webp');
+    background-image: url('img/5_background/second_half_background.png');
     background-size: cover;
     background-position: center;
     width: 100%;
@@ -25,11 +30,60 @@ canvas {
 
 .instructions span{
     display: flex;
-    font-size: 24px;
-    padding-top: 56px;
+    font-family: ZABRAS;
+    font-size: 40px;
+    color: black;
+    padding-top: 24px;
+    
 }
 
-@media only screen and (max-width: 720px){
+
+.optionPanel{
+    position: absolute;
+    top: 2.5vw;
+    left: 35vw;  
+}
+
+.panel{
+    position: absolute;
+    bottom: 10px;
+    left: 25px;
+    
+    display: flex;
+    justify-content: space-between;
+    width: 90vw;
+}
+
+
+
+
+button {
+    height: 10vh;
+    width: 10vw;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #FFA62D;
+    border-radius: 100%;
+    border: solid 2px;
+}
+
+img {
+    width: 25px;
+    height: 25px;
+}
+
+.bottle{
+    width: 25px !important;
+    height: 25px !important;
+}
+
+
+.hideOnDesktop{
+    display: none;
+}
+
+
+@media only screen and (max-width: 950px){
     canvas {
         width: 100%;
     }
@@ -43,6 +97,10 @@ canvas {
 
     .hide {
         display: none;
+    }
+
+    .showOnMobile{
+        display: flex
     }
 
     body {

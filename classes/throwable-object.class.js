@@ -37,8 +37,8 @@ class ThrowableObject extends MoveableObject{
 
     /**
      * character throws a throwable object
-     * @param {*} otherDirection give the direction in which the character is facing
-     * @param {*} x horizontal coordinate for calculating the position of the image
+     * @param {Boolean} otherDirection give the direction in which the character is facing
+     * @param {integer} x horizontal coordinate for calculating the position of the image
      */
     throw(otherDirection, x){
         this.speedY = 30;

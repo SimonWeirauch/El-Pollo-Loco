@@ -1,5 +1,4 @@
 class MoveableObject extends DrawableObject{
-   
     speed = 0.15;
     otherDirection = false;
     speedY = 0;
@@ -8,6 +7,7 @@ class MoveableObject extends DrawableObject{
     ObjectOffsetY;       
     ObjectOffsetX;       
     
+
     /**
      * reduces the y-position if character is in the air
      */
@@ -53,18 +53,27 @@ class MoveableObject extends DrawableObject{
      * @param {object} mo an instance of a moveable object
      */
     getOffsetParameter(mo){
-        if(mo instanceof Chicken || mo instanceof SmallChicken){
-            this.ObjectOffsetY = -20;      
-            this.ObjectOffsetX = -20; 
+        if(mo instanceof SmallChicken){
+            this.ObjectOffsetY = 0;      
+            this.ObjectOffsetX = -39; 
+        }
+        else if(mo instanceof Chicken ){
+            this.ObjectOffsetY = 0;      
+            this.ObjectOffsetX = -39; 
         }
         else if(mo instanceof Endboss){
             this.ObjectOffsetY = -250;      
-            this.ObjectOffsetX = -100;  
+            this.ObjectOffsetX = -50;  
         }
-        else{
+        else if(mo instanceof Coin){
             this.ObjectOffsetY = -170;      
             this.ObjectOffsetX = -50; 
-        } 
+        }
+        else {
+            this.ObjectOffsetY = -170;      
+            this.ObjectOffsetX = -70;
+        }
+        
     }
 
 
@@ -97,7 +106,7 @@ class MoveableObject extends DrawableObject{
 
 
     /**
-     * sets the speed of the movement of the y-position
+     * sets the speed of the movement of the y-position after a normal jump
      */
     jump(){
         this.speedY = 30;
@@ -105,7 +114,7 @@ class MoveableObject extends DrawableObject{
 
 
     /**
-     * sets the speed of the movement of the y-position
+     * sets the speed of the movement of the y-position after a small jump
      */
     smallJump(){
         this.speedY = 15
@@ -113,7 +122,7 @@ class MoveableObject extends DrawableObject{
 
 
     /**
-     * reduces the x-position of the character if the character
+     * reduces the x-position of the character after the character
      * is hit by an enemy
      */
     blowback(){

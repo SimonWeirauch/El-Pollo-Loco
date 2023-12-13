@@ -89,21 +89,28 @@ class Character extends MoveableObject {
     animate(){
         setInterval(() => {
             this.walking_sound.pause();
-            if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x){
+            if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x
+                && !(this.world.level == startScreen)){
                 this.moveRight();
                 this.otherDirection = false;
-                this.walking_sound.play();
+                if(!(background_sound.muted)){
+                    this.walking_sound.play();
+                }
                 this.getLastAction();
             }
-            if(this.world.keyboard.LEFT && this.x > 0){
+            if(this.world.keyboard.LEFT && this.x > 0 && !(this.world.level == startScreen)){
                 this.moveLeft();
                 this.otherDirection = true;
-                this.walking_sound.play();
+                if(!(background_sound.muted)){
+                    this.walking_sound.play();
+                }
                 this.getLastAction();
             }
-            if(this.world.keyboard.SPACE && !this.isAboveGround()){
+            if(this.world.keyboard.SPACE && !this.isAboveGround() && !(this.world.level == startScreen)){
                 this.jump();
-                this.jump_sound.play();
+                if(!(background_sound.muted)){
+                    this.jump_sound.play();
+                }
                 this.getLastAction();
             }
             this.world.camera_x = -this.x + 100;
@@ -133,7 +140,7 @@ class Character extends MoveableObject {
 
 
     /**
-     * calculates the current energy of the character if the character is hit
+     * calculates the current energy the character if the character is hit
      * by an enemy
      */
     hit(){
@@ -194,7 +201,7 @@ class Character extends MoveableObject {
 
 
     /**
-     * saves the last time a relevant button is pressed which triggers a character movement
+     * saves the last time a relevant button is pressed which triggered a character movement
      */
     getLastAction(){
         this.lastAction = new Date().getTime();

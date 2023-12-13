@@ -17,7 +17,7 @@ class Bottle extends DrawableObject{
     /**
      * deletes the collectable bottle object 
      * @param {Object} level current level object
-     * @param {integer} bottleId the id of the bottle that will be deleted
+     * @param {integer} bottleId the id of the collectable bottle that will be deleted
      */
     deleteBottle(level, bottleId){
         for (let index = 0; index < level.bottles.length; index++) {

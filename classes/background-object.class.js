@@ -5,7 +5,7 @@ class BackgroundObject extends MoveableObject {
     /**
      * creates a background object
      * @param {string} imagePath path of image
-     * @param {integer} x horizontal coordinate for placing the image
+     * @param {integer} x horizontal coordinate for placing the backgroundimage
      */
     constructor(imagePath, x){
         super().loadImage(imagePath)

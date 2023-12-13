@@ -74,8 +74,14 @@ function initLevel2(){
 
         ],
         [
+            new StartscreenObject('img/10_background_page/sign2.webp', 200, 150, 200, 200),
+        ],
+        [
             new StartscreenObject('img/9_intro_outro_screens/game_over/oh_no_you_lost.png', 0, 0, 420, 720),
             new StartscreenObject('img/10_background_page/start.png',340, 300, 50, 50),
+        ],
+        [
+            new StartscreenObject('img/9_intro_outro_screens/game_over/game over!.png', 0, 0, 420, 720),
         ]
     )
 }

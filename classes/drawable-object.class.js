@@ -7,6 +7,7 @@ class DrawableObject {
     height = 150;
     width = 100;
 
+    
     /**
      * loads the drawable image
      * @param {string} path path of the image

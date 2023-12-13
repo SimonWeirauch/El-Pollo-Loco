@@ -9,8 +9,8 @@ class Statusbar extends DrawableObject{
      * creates a statusbar object
      * @param {array} imgStatusArray image array of the statusbar 
      * @param {integer} percentage percentage value of the statusbar
-     * @param {integer} x horizontal coordinate for placing the image
      * @param {integer} y vertical coordinate for placing the image
+     * @param {integer} x horizontal coordinate for placing the image
      */
     constructor(imgStatusArray, percentage, y, x){
         super();
@@ -25,7 +25,7 @@ class Statusbar extends DrawableObject{
 
     /**
      * sets the percentage of the statusbar to the according value and
-     * displays the correct statusbar
+     * displays the correct image of the statusbar
      * @param {integer} percentage percentage value of the statusbar
      * @param {array} imgStatusArray image array of the statusbar
      */
@@ -69,8 +69,8 @@ class Statusbar extends DrawableObject{
 
 
     /**
-    * increases the current energy of the bottlebar if a collectable bottle object is used
-    * by an enemy
+    * increases the current energy of the bottlebar if a collectable bottle object is
+    * collected by the character
     */
     fillBottlebar(){
         this.bottleEnergy += 20; 
@@ -79,7 +79,7 @@ class Statusbar extends DrawableObject{
 
     /**
     * reduces the current energy of the bottlebar if a throwable object is used
-    * by an enemy
+    * by the character
     */
     emptyBottlebar(){
         this.bottleEnergy -= 20; 
@@ -88,7 +88,7 @@ class Statusbar extends DrawableObject{
     
     /**
     * reduces the current energy of the endboss if the endboss is hit
-    * by an enemy
+    * by a throwable object from the character
     */
     emptyEndbossHealthbar(){
         this.endbossEnergy -= 20;
