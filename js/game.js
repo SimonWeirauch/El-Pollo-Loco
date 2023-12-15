@@ -15,13 +15,17 @@ function init(){
     clearLevelObjects();
     world = new World(canvas, keyboard, level1);
     if(background_sound.muted){
-        controlBackgroundAudio();
+        background_sound.muted = false;
+    }
+    if(!(background_sound.muted)){
+        background_sound.play();
     }
 }
 
 
 /**
  * initializes the next level
+ * @param {String} levelString name of the level
  */
 function initNextLevel(levelString){
     canvas = document.getElementById('canvas');
@@ -33,20 +37,21 @@ function initNextLevel(levelString){
  * controls the music played in the background
  */
 function controlBackgroundAudio(){
-    if(background_sound.muted){
-        background_sound.loop = true;
-        background_sound.muted = false;
-       
-        background_sound.play();
+    if(!(background_sound.muted)){
+        background_sound.muted = true;
+
     }
     else{
-        background_sound.muted = true;
+        background_sound.loop = true;
+        background_sound.muted = false;
+        background_sound.play();
     } 
 }
 
 
 /**
  * initializes level
+ * @param {Object} level current level object
  */
 function loadNextLevel(level){                     
     if(level == level1){
@@ -68,7 +73,8 @@ function determineNextLevel(levelString){
         world = new World(canvas, keyboard, level2);
     }
     if(levelString == 'level2'){
-        initStartscreen();
+        background_sound.muted = false;
+        initStartscreen(background_sound.muted);
     }
 }
 
@@ -76,10 +82,14 @@ function determineNextLevel(levelString){
 /**
  * initializes startscreen
  */
-function initStartscreen(){
+function initStartscreen(isSoundMuted){
     canvas = document.getElementById('canvas');
     document.getElementById('hud').classList.remove('showOnMobile');
-    background_sound.muted = true;
+    if(!(isSoundMuted)){
+        background_sound.muted = true;
+    }
+    
+    
     keyboard = new Keyboard();
     startLevel();
     clearLevelObjects();

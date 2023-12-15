@@ -32,6 +32,7 @@ class World{
         'img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png'
     ]
     character = new Character();
+    addObjects = new ObjectAdder();
     level;
     ctx;
     canvas;
@@ -126,6 +127,7 @@ class World{
         && !(enemy.isDead) && this.character.characterHitCooldown()
     }
 
+
     /**
      * calls the various function to display that the character got hit
      */
@@ -134,7 +136,7 @@ class World{
             this.characterHit_sound.play();
         }
         this.character.hit();
-        this.character.blowback();
+        //this.character.blowback();
         this.healthbar.setPercentage(this.character.energy, this.HEALTHBAR_IMG)
     }
 
@@ -156,8 +158,7 @@ class World{
     enemyGotHit(enemy){
         enemy.hitChicken(this.level, enemy.iD);
         if(!(background_sound.muted)){
-            this.enemyHit_sound.play();
-        }
+            this.enemyHit_sound.play();}
         this.character.smallJump();
     }
 
@@ -180,8 +181,7 @@ class World{
         this.level.coins.forEach(coin => {
             if(this.character.isColliding(coin)){
                 if(!(background_sound.muted)){
-                    this.coin_sound.play();
-                }
+                    this.coin_sound.play();}
                 this.coinbar.fillCoinbar();
                 this.coinbar.setPercentage(this.coinbar.coinEnergy, this.COINBAR_IMG);
                 setTimeout(() => {
@@ -201,8 +201,7 @@ class World{
                 this.bottlebar.fillBottlebar();
                 this.bottleCount++;
                 if(!(background_sound.muted)){
-                    this.collectBottle_sound.play();
-                }
+                    this.collectBottle_sound.play();}
                 this.bottlebar.setPercentage(this.bottlebar.bottleEnergy, this.BOTTLEBAR_IMG);
                 bottle.deleteBottle(this.level, bottle.iD);
             }
@@ -242,6 +241,7 @@ class World{
         }
     }
 
+
     /**
      * calls the various function to display that a small chicken
      * got hit with a bottle
@@ -267,7 +267,6 @@ class World{
      */
     endbossGotHitWithBottle(enemy, bottleThrow){
         if(enemy instanceof Endboss && this.endbossHitCooldown()){
-            console.log('hit Endboss')
             this.enbossHealthbar.emptyEndbossHealthbar();
             this.enbossHealthbar.setPercentage(this.enbossHealthbar.endbossEnergy, this.ENDBOSSBAR_IMG);
             this.bottleBehaviour(bottleThrow);
@@ -372,10 +371,12 @@ class World{
      */
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-        this.addObjectsToMap(this.level.backgroundObjects);
-        this.addAlllevelObjects();
-        this.addStartscreenObjects();
-        this.addGameOverObjects();
+        this.addObjects.addObjectsToMap(this.level.backgroundObjects, this.ctx);
+        this.addObjects.addAlllevelObjects(this.level, this.gameover, this.camera_x, this.isEndbossDead, this.throwableObjects,
+             this.ctx, this.healthbar, this.coinbar, this.bottlebar, this.character,
+             this.enbossHealthbar);
+        this.addObjects.addStartscreenObjects(this.level, this.ctx);
+        this.addObjects.addGameOverObjects(this.gameover, this.level);
         self = this
         requestAnimationFrame(function(){
             self.draw();
@@ -384,194 +385,14 @@ class World{
 
 
     /**
-     * adds the various level objects onto the canvas        
-     */
-    addAlllevelObjects(){
-        if(!(this.level == startScreen)){
-            
-            //space for not fixed objects
-            if(!(this.gameover)){this.ctx.translate(this.camera_x, 0);} //verschiebt die Kamera nach rechts
-            this.drawAllLevelObjects();
-            if(!(this.gameover)){this.ctx.translate(-this.camera_x, 0);}//Back
-            
-            //Space for fixed objects
-            this.addAllFixedObjects();
-            this.addVictoryScreen();
-
-            //space for objects that are focused by the camera
-            this.ctx.translate(this.camera_x, 0); //Forwards
-            this.addCharacter();
-            this.ctx.translate(-this.camera_x, 0); //verschiebt die Kamera nach links
-        }
-    }
-
-
-    /**
-     * draws the victoryscreen on the level
-     */
-    addVictoryScreen(){
-        if(this.isEndbossDead){
-            this.addObjectsToMap(this.level.victoryScreen);
-        }
-    }
-
-
-    /**
-     * draws the character on the level
-     */
-    addCharacter(){
-        if(!(this.level == startScreen) && !(this.gameover)){
-            this.addToMap(this.character);
-        }
-    }
-
-
-    /**
-     * draws the objects on the level
-     */
-    drawAllLevelObjects(){
-        this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.startscreenObjects);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.level.clouds);
-        this.addObjectsToMap(this.level.coins);
-        this.addObjectsToMap(this.level.bottles);
-        this.addObjectsToMap(this.throwableObjects);
-        this.showCurrentLevel(this.level);
-    }
-
-
-    /**
-     * draws the objects for that are fixed regardless of the camera position
-     */
-    addAllFixedObjects(){
-        if(!(this.level == startScreen)){
-            this.addToMap(this.healthbar);
-            this.addToMap(this.coinbar);
-            this.addToMap(this.bottlebar);
-            if(this.character.x > (this.level.level_end_x - 750)){
-                this.addToMap(this.enbossHealthbar);
-            }
-        }
-    }
-
-
-    /**
-     * draws the objects for the startscreen
-     */
-    addStartscreenObjects(){
-        if(this.level == startScreen){
-            this.addObjectsToMap(this.level.startscreenObjects);
-            this.addTextObject("Left =", 40, 400);
-            this.addTextObject("Right =", 200, 400);
-            this.addTextObject("Jump =", 380, 400);
-            this.addTextObject("Throw = D", 570, 400);
-            this.addTextObject("M =", 440, 40);
-            this.addTextObject("F =", 590, 40);
-        }
-    }
-
-
-    /**
-     * draws the objects for the gameover screen
-     */
-    addGameOverObjects(){
-        if(this.gameover){
-            this.addObjectsToMap(this.level.gameoverScreenObjects);
-        }
-    }
-
-
-    /**
-     * displays a text on the canvas
-     * @param {string} text text that will be displayed
-     * @param {integer} x horizontal coordinate for placing the image
-     * @param {integer} y vertical coordinate for placing the image
-     */
-    addTextObject(text, x, y){
-        this.ctx.font = "30px ZABRAS";
-        this.ctx.fillText(text, x, y);
-    }
-
-
-    /**
-     * adds the string on to the shield at the beginning of each level
-     * @param {object} level current level object
-     */
-    showCurrentLevel(level){
-        if(level == level1){
-            this.addTextObject("Level 1", 250, 230);
-        }
-        else if(level == level2){
-            this.addTextObject("Level 2", 250, 230);
-        }
-    }
-
-
-    /**
-     * adds the different objects of the level to the canvas
-     * @param {objects} objects 
-     */
-    addObjectsToMap(objects){
-        objects.forEach(o => {
-            this.addToMap(o);
-        });
-    }
-
-
-    /**
-     * adds a moveable object to the canvas depending on it´s facing
-     * @param {object} mo an instance of a moveable object
-     */
-    addToMap(mo){
-        if(mo.otherDirection) {
-            this.flipImage(mo);
-        }
-        mo.draw(this.ctx);
-        //mo.drawFrame(this.ctx);
-        if(mo.otherDirection) {
-            this.flipImageBack(mo);
-        }
-    }
-
-
-    /**
-     * flips the facing of the moveable object
-     * @param {object} mo an instance of a moveable object
-     */
-    flipImage(mo){
-        this.ctx.save();
-        this.ctx.translate(mo.width, 0);
-        this.ctx.scale(-1, 1);
-        mo.x = mo.x * -1;
-    }
-
-
-    /**
-     * flips the  facing of the moveable object back
-     * @param {object} mo an instance of a moveable object 
-     */
-    flipImageBack(mo){
-        mo.x = mo.x * -1;
-        this.ctx.restore();
-    }
-
-
-    /**
      *  returns a bool if the energy of the character hits 0 or less
      * @returns bool
      */
-    gameOver(){
-        return this.character.energy <= 0;
-    }
+    gameOver(){return this.character.energy <= 0;}
 
 
     /**
      * clears all active intervalls
      */
-    clearAllIntervalls(){
-        for(let i = 1; i < 999; i++){
-            window.clearInterval(i);
-        }
-    }
+    clearAllIntervalls(){for(let i = 1; i < 999; i++){window.clearInterval(i);}}
 }

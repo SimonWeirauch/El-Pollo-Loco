@@ -81,11 +81,19 @@ class MoveableObject extends DrawableObject{
      * displays the animation of a image array
      * @param {array} images array of the images that will be displayed
      */
-    playAnimation(images){
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
+    playAnimation(images, jump){
+        if(jump == undefined){
+            let i = this.currentImage % images.length;
+            let path = images[i];
+            this.img = this.imageCache[path];
+            this.currentImage++;
+        }
+        else{
+            for (let i = 0; i < images.length; i++) {
+                let path = images[i];
+                this.img = this.imageCache[path];
+            }
+        }
     }
 
 
