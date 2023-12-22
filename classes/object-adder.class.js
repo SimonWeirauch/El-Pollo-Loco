@@ -40,12 +40,12 @@ class ObjectAdder{
     drawAllLevelObjects(level, throwableObjects, ctx){
         this.addObjectsToMap(level.backgroundObjects, ctx);
         this.addObjectsToMap(level.startscreenObjects, ctx );
-        this.addObjectsToMap(level.enemies, ctx);
+        this.showCurrentLevel(level, ctx);
         this.addObjectsToMap(level.clouds, ctx);
         this.addObjectsToMap(level.coins, ctx);
         this.addObjectsToMap(level.bottles, ctx);
+        this.addObjectsToMap(level.enemies, ctx);
         this.addObjectsToMap(throwableObjects, ctx);
-        this.showCurrentLevel(level, ctx);
     }
 
 
@@ -139,9 +139,8 @@ class ObjectAdder{
             this.addTextObject("Right =", 200, 400, ctx);
             this.addTextObject("Jump =", 380, 400, ctx);
             this.addTextObject("Throw = D", 570, 400, ctx);
-            this.addTextObject("M =", 440, 40, ctx);
+            this.addTextObject("M =", 30, 40, ctx);
             this.addTextObject("F =", 590, 40, ctx);
-            this.addTextObject("Click Canvas =", 30, 40, ctx);
         }
     }
 
@@ -155,6 +154,9 @@ class ObjectAdder{
     addGameOverObjects(gamover, level, ctx){
         if(gamover){
             this.addObjectsToMap(level.gameoverScreenObjects, ctx);
+            document.getElementById('restartButton').classList.remove('d-none');
+            
+            
         }
     }
 

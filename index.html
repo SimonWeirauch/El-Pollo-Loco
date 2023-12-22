@@ -31,7 +31,6 @@
     <script src="classes/endboss.class.js"></script>
     <script src="classes/object-adder.class.js"></script>
     
-    
     <script src="levels/level1.js"></script>
     <script src="levels/level2.js"></script>
     
@@ -41,14 +40,17 @@
 <body onload="initStartscreen()">
     <div  class="background">
         <h1 class="hide" >El Pollo Loco</h1>
-        <canvas onclick="init()" id="canvas" width="720" height="420">
+        
+        <img id="restartButton" class="d-none" src="img/10_background_page/start.png"  onclick="init()" alt="">
+        <img id="mobileStart" class="showInPortraitMode hide hideOnGameplay" src="img/10_background_page/start.png"  onclick="init()" alt="">
+
+        <canvas id="canvas" width="720" height="420">
             
         </canvas>
         <div class="hide landscapeMode showInPortraitMode">
             Please turn your device into landscape mode
         </div>
         <img class="showInPortraitMode" src="img/10_background_page/landscape.png" alt="">
-
         <div id="hud" class="hideOnDesktop">
             <div class="panel">
                 <div class="pannel-wrapper">
@@ -71,10 +73,10 @@
             </div>
 
             <div class="optionPanel"> 
-                <button id="musicOff" class="hide" >
+                <button id="musicOff" class="hide soundButton" >
                     <img src="img/10_background_page/soundOff.png" alt="">
                 </button>
-                <button id="musicOn" >
+                <button id="musicOn" class="soundButton">
                     <img src="img/10_background_page/soundOn.png" alt="">
                 </button>    
             </div>

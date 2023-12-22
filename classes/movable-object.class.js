@@ -81,13 +81,13 @@ class MoveableObject extends DrawableObject{
      * @param {array} images array of the images that will be displayed
      */
     playAnimation(images){
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
+            let i = this.currentImage % images.length;
+            let path = images[i];
+            this.img = this.imageCache[path];
+            this.currentImage++;
     }
 
-
+    
     /**
     * increases the x-position of the character to move right
     */
@@ -117,14 +117,5 @@ class MoveableObject extends DrawableObject{
      */
     smallJump(){
         this.speedY = 15
-    }
-
-
-    /**
-     * reduces the x-position of the character after the character
-     * is hit by an enemy
-     */
-    blowback(){
-        this.x -= 70;
     }
 }

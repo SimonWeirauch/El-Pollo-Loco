@@ -10,7 +10,7 @@ let background_sound = new Audio('audio/backgroundMusic.mp3');
  */
 function init(){
     canvas = document.getElementById('canvas');
-    document.getElementById('hud').classList.add('showOnMobile');
+    settingsCSS();
     initLevel1();
     clearLevelObjects();
     world = new World(canvas, keyboard, level1);
@@ -20,6 +20,19 @@ function init(){
     if(!(background_sound.muted)){
         background_sound.play();
     }
+}
+
+
+/**
+ * changes the css settings to play the game
+ */
+function settingsCSS(){
+    document.getElementById('hud').classList.add('showOnMobile');
+    document.getElementById('mobileStart').classList.add('d-none');
+    document.getElementById('mobileStart').classList.remove('hide');
+    document.getElementById('mobileStart').classList.remove('showInPortraitMode');
+    document.getElementById('mobileStart').classList.remove('hideOnGameplay');
+    document.getElementById('restartButton').classList.add('d-none');
 }
 
 
@@ -39,7 +52,6 @@ function initNextLevel(levelString){
 function controlBackgroundAudio(){
     if(!(background_sound.muted)){
         background_sound.muted = true;
-
     }
     else{
         background_sound.loop = true;
@@ -76,6 +88,8 @@ function determineNextLevel(levelString){
         if(!background_sound.muted){
             background_sound.muted = false;
         }
+        document.getElementById('desktopStart').classList.remove('d-none');
+        
         deleteEventListener();
         initStartscreen();
     }

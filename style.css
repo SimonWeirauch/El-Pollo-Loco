@@ -5,6 +5,7 @@ body {
 canvas {
     background-size: cover;
     display: block;
+    
 }
 
 .clickable{
@@ -16,6 +17,11 @@ h1 {
     font-size: 56px;
     color: black;
 }
+
+
+
+
+
 
 .background{
     background-image: url('img/5_background/second_half_background.png');
@@ -67,6 +73,16 @@ button {
     border: solid 2px;
 }
 
+.soundButton {
+    height: 10vh;
+    width: 10vw;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #FFA62D;
+    border-radius: 100%;
+    border: solid 2px;
+}
+
 img {
     width: 25px;
     height: 25px;
@@ -85,11 +101,61 @@ img {
     display: none;
 }
 
+.d-none{
+    display: none;
+}
+
+
+#restartButton{
+    position: absolute;
+    top: 45%;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+}
+
+
+#mobileStart{
+    position: absolute;
+    top: 16%;
+    z-index: 0;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+}
+
+#mobileStart:hover{
+    scale: 1.4;
+}
+
+#restartButton:hover{
+    scale: 1.4;
+}
+
 
 @media only screen and (max-width: 950px){
     canvas {
         width: 100%;
     }
+
+    #mobileStart{
+        position: absolute;
+        top: 2%;
+        z-index: 0;
+        cursor: pointer;
+        height: 40px;
+        width: 40px;
+    }
+
+    #restartButton{
+        position: absolute;
+        top: 70%;
+        cursor: pointer;
+        height: 40px;
+        width: 40px;
+    }
+
+
 }
 
 
@@ -103,18 +169,22 @@ img {
     }
 
     .showOnMobile{
-        display: flex
+        display: flex;
     }
 
     body {
         align-items: normal;
     }
+
 }
     
 
 @media only screen  and (orientation:portrait){
-
     canvas {        
+        display: none;
+    }
+
+    #restartButton{
         display: none;
     }
 
@@ -130,4 +200,17 @@ img {
     .showInPortraitMode{
         display: flex;
     }
+
+    #mobileStart{
+        display: none;
+    }
+}
+
+@media only screen  and (orientation:landscape){
+
+    
+    .hideOnGameplay{
+        display: flex;
+    }
+    
 }

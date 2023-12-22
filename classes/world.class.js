@@ -96,6 +96,7 @@ class World{
                 this.checkEnemyCollisions();
                 this.checkObjectCollisions();
                 this.checkThrowObjects();
+                this.endbossFacing(this.level.enemies);
             }
         }, 1000/60);
     }
@@ -114,6 +115,24 @@ class World{
                 this.enemyGotHit(enemy);
             }
         })
+    }
+
+
+    /**
+     * turns the endboss when reaching each border of the level
+     * @param {Array} enemies array of the enemies in the level
+     */
+    endbossFacing(enemies){
+        enemies.forEach(enemy => {
+            if(enemy instanceof Endboss){
+                if(enemy.x < 30){
+                    enemy.otherDirection = true;
+                }
+                if(enemy.x > this.level.level_end_x - 50){
+                    enemy.otherDirection = false;
+                }
+            }
+        });
     }
 
 

@@ -24,9 +24,9 @@ function startLevel(){
             new StartscreenObject('img/10_background_page/right.png', 305, 365, 50, 50),
             new StartscreenObject('img/10_background_page/spacebar.png', 490, 365, 50, 50),
             new StartscreenObject('img/10_background_page/fullscreen.png', 650, 10, 40, 40),
-            new StartscreenObject('img/10_background_page/soundOn.png', 500, 10, 40, 40),
-            new StartscreenObject('img/10_background_page/start.png', 220, 10, 40, 40),
-            
+            new StartscreenObject('img/10_background_page/soundOn.png', 90, 10, 40, 40),  
         ]
-    ) 
+    )
+    
+    
 }
