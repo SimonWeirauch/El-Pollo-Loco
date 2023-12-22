@@ -19,8 +19,8 @@ class Character extends MoveableObject {
         'img/2_character_pepe/3_jump/J-35.png',
         'img/2_character_pepe/3_jump/J-36.png',
         'img/2_character_pepe/3_jump/J-37.png',
-        //'img/2_character_pepe/3_jump/J-38.png',
-        //'img/2_character_pepe/3_jump/J-39.png'       
+        'img/2_character_pepe/3_jump/J-38.png',
+        'img/2_character_pepe/3_jump/J-39.png'       
     ];
     IMAGES_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
@@ -189,14 +189,14 @@ class Character extends MoveableObject {
             else if(this.isHurt()){
                 this.playAnimation(this.IMAGES_HURT);}
             else if(this.isAboveGround()){
-                this.playAnimation(this.IMAGES_JUMPING, true);}
+                this.playAnimation(this.IMAGES_JUMPING);}
             else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT){
                 this.playAnimation(this.IMAGES_WALKING);}
             else if(this.activateLongIdle()){
                 this.playAnimation(this.IMAGES_LONGIDLE);}
             else{
                 this.playAnimation(this.IMAGES_IDLE);}
-        }, 50);
+        }, 100);
     }
 
 
@@ -230,8 +230,8 @@ class Character extends MoveableObject {
      * @returns bool
      */
     characterHitCooldown(){
-        let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
-        timepassed = timepassed / 1000; //Difference in s
+        let timepassed = new Date().getTime() - this.lastHit; 
+        timepassed = timepassed / 1000; 
         return timepassed > 1.5;
     }
 
@@ -242,8 +242,8 @@ class Character extends MoveableObject {
      * @returns bool
      */
     isHurt(){
-        let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
-        timepassed = timepassed / 1000; //Difference in s
+        let timepassed = new Date().getTime() - this.lastHit; 
+        timepassed = timepassed / 1000; 
         return timepassed < 1.5;
     }
 

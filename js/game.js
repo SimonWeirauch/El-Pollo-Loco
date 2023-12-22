@@ -73,23 +73,35 @@ function determineNextLevel(levelString){
         world = new World(canvas, keyboard, level2);
     }
     if(levelString == 'level2'){
-        background_sound.muted = false;
-        initStartscreen(background_sound.muted);
+        if(!background_sound.muted){
+            background_sound.muted = false;
+        }
+        deleteEventListener();
+        initStartscreen();
     }
+}
+
+
+/**
+ * delets the eventlistener after completing the game
+ */
+function deleteEventListener(){
+    document.removeEventListener('keydown', keyboard.controlKeyPressedEvent());
+    document.removeEventListener('keyup', keyboard.controlKeyReleasedEvent());
+    document.getElementById('Left').removeEventListener('touchstart', keyboard.touchMoveLeft());
+    document.getElementById('Right').removeEventListener('touchstart', keyboard.touchMoveRight());
+    document.getElementById('Jump').removeEventListener('touchstart', keyboard.touchJump());
+    document.getElementById('Throw').removeEventListener('touchstart', keyboard.touchThrow());
+    document.getElementById('musicOn').removeEventListener('touchstart', keyboard.touchMusic());
 }
 
 
 /**
  * initializes startscreen
  */
-function initStartscreen(isSoundMuted){
+function initStartscreen(){
     canvas = document.getElementById('canvas');
     document.getElementById('hud').classList.remove('showOnMobile');
-    if(!(isSoundMuted)){
-        background_sound.muted = true;
-    }
-    
-    
     keyboard = new Keyboard();
     startLevel();
     clearLevelObjects();

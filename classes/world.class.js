@@ -136,7 +136,6 @@ class World{
             this.characterHit_sound.play();
         }
         this.character.hit();
-        //this.character.blowback();
         this.healthbar.setPercentage(this.character.energy, this.HEALTHBAR_IMG)
     }
 
@@ -156,10 +155,12 @@ class World{
      * @param {object} enemy current enemy object
      */
     enemyGotHit(enemy){
-        enemy.hitChicken(this.level, enemy.iD);
-        if(!(background_sound.muted)){
-            this.enemyHit_sound.play();}
-        this.character.smallJump();
+        if(!(enemy instanceof Endboss)){
+            enemy.hitChicken(this.level, enemy.iD);
+            if(!(background_sound.muted)){
+                this.enemyHit_sound.play();}
+            this.character.smallJump();
+        }
     }
 
 
@@ -376,7 +377,7 @@ class World{
              this.ctx, this.healthbar, this.coinbar, this.bottlebar, this.character,
              this.enbossHealthbar);
         this.addObjects.addStartscreenObjects(this.level, this.ctx);
-        this.addObjects.addGameOverObjects(this.gameover, this.level);
+        this.addObjects.addGameOverObjects(this.gameover, this.level, this.ctx);
         self = this
         requestAnimationFrame(function(){
             self.draw();

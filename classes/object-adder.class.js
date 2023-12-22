@@ -91,10 +91,24 @@ class ObjectAdder{
             this.addToMap(healthbar, ctx);
             this.addToMap(coinbar, ctx);
             this.addToMap(bottlebar, ctx);
-            if(character.x > (level.level_end_x - 750)){
+            this.addEndbossHealthbar(character, level, endbossHealthbar, ctx);
+        }
+    }
+
+
+    /**
+     * add endbosshealthbar if the character is near the endboss
+     * @param {object} character current character object
+     * @param {object} level current level object
+     * @param {object} endbossHealthbar current endbossHealthbar object
+     * @param {property of canvas} ctx getContext function of the canvas HTML-element 
+     */
+    addEndbossHealthbar(character, level, endbossHealthbar, ctx){
+        level.enemies.forEach(enemy => {
+            if(enemy instanceof Endboss && character.x > (enemy.x - 500)){
                 this.addToMap(endbossHealthbar, ctx);
             }
-        }
+        });
     }
 
 
@@ -127,7 +141,7 @@ class ObjectAdder{
             this.addTextObject("Throw = D", 570, 400, ctx);
             this.addTextObject("M =", 440, 40, ctx);
             this.addTextObject("F =", 590, 40, ctx);
-            this.addTextObject("Landscape Mode =", 120, 40, ctx);
+            this.addTextObject("Click Canvas =", 30, 40, ctx);
         }
     }
 

@@ -28,18 +28,25 @@ class Keyboard{
      * controls status of keys, when key is pressed
      */
     controlKeyPressedEvent(){
-        document.addEventListener('keydown', (event) => {
-            if(event.keyCode == 39){keyboard.RIGHT = true;}
-            if(event.keyCode == 37){keyboard.LEFT = true;}
-            if(event.keyCode == 40){keyboard.DOWN = true;}
-            if(event.keyCode == 32){keyboard.SPACE = true;}
-            if(event.keyCode == 68){keyboard.D = true;}
-            if(event.keyCode == 70){fullscreen();}
-            if(event.keyCode == 77){
-                console.log("hit key m");
-                controlBackgroundAudio();
-            }
-        })
+        document.addEventListener('keydown', ev => this.keyPressed(ev))         
+    }
+    
+
+    /**
+     * changes the status of the keyboard attributes to true, if
+     * the specific character is pressed
+     * @param {Event} event 
+     */
+    keyPressed(event){
+        if(event.keyCode == 39){this.RIGHT = true;}
+        if(event.keyCode == 37){this.LEFT = true;}
+        if(event.keyCode == 40){this.DOWN = true;}
+        if(event.keyCode == 32){this.SPACE = true;}
+        if(event.keyCode == 68){this.D = true;}
+        if(event.keyCode == 70){fullscreen();}
+        if(event.keyCode == 77){
+            controlBackgroundAudio();
+        }
     }
     
 
@@ -47,13 +54,21 @@ class Keyboard{
      * controls status of keys, when key is released
      */
     controlKeyReleasedEvent(){
-        document.addEventListener('keyup', (event) => {
-            if(event.keyCode == 39){keyboard.RIGHT = false;}
-            if(event.keyCode == 37){keyboard.LEFT = false;}
-            if(event.keyCode == 40){keyboard.DOWN = false;}
-            if(event.keyCode == 32){keyboard.SPACE = false;}
-            if(event.keyCode == 68){keyboard.D = false;}
-        })
+        document.addEventListener('keyup', (ev) => this.keyReleased(ev))
+    }
+
+
+    /**
+     * changes the status of the keyboard attributes to false, if
+     * the specific character is released
+     * @param {Event} event 
+     */
+    keyReleased(event){
+        if(event.keyCode == 39){this.RIGHT = false;}
+        if(event.keyCode == 37){this.LEFT = false;}
+        if(event.keyCode == 40){this.DOWN = false;}
+        if(event.keyCode == 32){this.SPACE = false;}
+        if(event.keyCode == 68){this.D = false;}
     }
     
 
@@ -141,7 +156,6 @@ class Keyboard{
             controlBackgroundAudio();
             document.getElementById('musicOn').classList.add('hide');
             document.getElementById('musicOff').classList.remove('hide');
-            console.log("hit touch m");
         });
         
         document.getElementById('musicOff').addEventListener('touchstart', (e) => {
@@ -149,7 +163,6 @@ class Keyboard{
             controlBackgroundAudio();
             document.getElementById('musicOff').classList.add('hide');
             document.getElementById('musicOn').classList.remove('hide');
-            console.log("hit touch m");
         });
     }
 }

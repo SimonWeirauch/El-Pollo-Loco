@@ -77,6 +77,9 @@ img {
     height: 25px !important;
 }
 
+.showInPortraitMode{
+    display: none;
+}
 
 .hideOnDesktop{
     display: none;
@@ -105,5 +108,26 @@ img {
 
     body {
         align-items: normal;
+    }
+}
+    
+
+@media only screen  and (orientation:portrait){
+
+    canvas {        
+        display: none;
+    }
+
+    .landscapeMode{
+        margin-bottom: 64px;
+    }
+
+    img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .showInPortraitMode{
+        display: flex;
     }
 }
