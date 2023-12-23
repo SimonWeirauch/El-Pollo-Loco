@@ -5,7 +5,8 @@ class MoveableObject extends DrawableObject{
     acceleration = 2.5;
     CharacterOffsetY = -20;
     ObjectOffsetY;       
-    ObjectOffsetX;       
+    ObjectOffsetX;
+    inFall = false;       
     
 
     /**
@@ -81,10 +82,23 @@ class MoveableObject extends DrawableObject{
      * @param {array} images array of the images that will be displayed
      */
     playAnimation(images){
-            let i = this.currentImage % images.length;
-            let path = images[i];
-            this.img = this.imageCache[path];
-            this.currentImage++;
+        this.checkJumpAnimation()
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+    }
+
+
+    /**
+     * checks if the character y-position is decreasing and sets
+     * the current image to fall animation
+     */
+    checkJumpAnimation(){
+        if(this.speedY < 15 && !this.inFall){
+            this.currentImage = 2
+            this.inFall = true;  
+        }
     }
 
     
@@ -108,6 +122,10 @@ class MoveableObject extends DrawableObject{
      * sets the speed of the movement of the y-position after a normal jump
      */
     jump(){
+        if(!this.isAboveGround()){
+            this.inFall = false;
+            this.currentImage = 0;
+        }
         this.speedY = 30;
     }
 
@@ -116,6 +134,7 @@ class MoveableObject extends DrawableObject{
      * sets the speed of the movement of the y-position after a small jump
      */
     smallJump(){
-        this.speedY = 15
+        this.currentImage = 0;
+        this.speedY = 20;
     }
 }
