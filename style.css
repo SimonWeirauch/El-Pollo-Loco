@@ -109,20 +109,22 @@ img {
 #restartButton{
     position: absolute;
     top: 45%;
+    left: 48%;
     cursor: pointer;
     height: 40px;
     width: 40px;
 }
 
-
 #mobileStart{
     position: absolute;
     top: 16%;
+    left: 50%;
     z-index: 0;
     cursor: pointer;
     height: 40px;
     width: 40px;
 }
+
 
 #mobileStart:hover{
     scale: 1.4;
@@ -137,6 +139,11 @@ img {
     canvas {
         width: 100%;
     }
+
+    #canvasContainer{
+        width: 100%;
+    }
+    
 
     #mobileStart{
         position: absolute;
@@ -154,13 +161,15 @@ img {
         height: 40px;
         width: 40px;
     }
-
-
 }
 
 
 @media only screen and (max-height: 480px){
     canvas {
+        height: 100vh;
+    }
+
+    #canvasContainer{
         height: 100vh;
     }
 

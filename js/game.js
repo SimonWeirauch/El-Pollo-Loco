@@ -88,8 +88,7 @@ function determineNextLevel(levelString){
         if(!background_sound.muted){
             background_sound.muted = false;
         }
-        document.getElementById('desktopStart').classList.remove('d-none');
-        
+        document.getElementById('mobileStart').classList.remove('d-none');
         deleteEventListener();
         initStartscreen();
     }

@@ -41,12 +41,14 @@
     <div  class="background">
         <h1 class="hide" >El Pollo Loco</h1>
         
-        <img id="restartButton" class="d-none" src="img/10_background_page/start.png"  onclick="init()" alt="">
-        <img id="mobileStart" class="showInPortraitMode hide hideOnGameplay" src="img/10_background_page/start.png"  onclick="init()" alt="">
-
-        <canvas id="canvas" width="720" height="420">
+        <div id="canvasContainer" width="720" height="420">
+            <img id="restartButton" class="d-none" src="img/10_background_page/start.png"  onclick="init()" alt="">
+            <img id="mobileStart" class="showInPortraitMode hide hideOnGameplay" src="img/10_background_page/start.png"  onclick="init()" alt="">
+            <canvas id="canvas" width="720" height="420">
             
-        </canvas>
+            </canvas>
+        </div>
+
         <div class="hide landscapeMode showInPortraitMode">
             Please turn your device into landscape mode
         </div>
